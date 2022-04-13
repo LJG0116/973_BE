@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -17,26 +18,26 @@ public class MemberService {
 
     //회원가입
     @Transactional
-    public Long join(Member member) {
+    public Long join(Member member){
+        //같은 이름이 있는 중복 x
         validateDuplicateMember(member);
+
         memberRepository.save(member);
         return member.getId();
     }
 
     private void validateDuplicateMember(Member member) {
-        //Exception
-        List<Member> findMembers = memberRepository.findByName(member.getName());
-        if (!findMembers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다");
-        }
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m->{
+                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                });
     }
 
-    //회원 전체 조회
     public List<Member> findMembers(){
         return memberRepository.findAll();
     }
 
-    public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+    public Optional<Member> findOne(Long memberId) {
+        return memberRepository.findById(memberId);
     }
 }
