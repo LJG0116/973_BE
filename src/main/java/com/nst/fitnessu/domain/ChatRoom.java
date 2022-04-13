@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor r
+@AllArgsConstructor
 @Builder
 public class ChatRoom {
     @Id

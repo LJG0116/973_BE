@@ -49,8 +49,4 @@ public class Post {
         member.getPosts().add(this);
     }
 
-    public void setContent(Content content) {
-        this.content=content;
-        content.setPost(this);
-    }
 }
