@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import javax.sql.DataSource;
@@ -25,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/home").permitAll()
+                    .antMatchers("/","/api/hello").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
@@ -41,11 +43,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
+                .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select email,password,enabled "
-                        + "from bael_users "
+                        + "from Member "
                         + "where email = ?")
-                .authoritiesByUsernameQuery("select email,authority "
-                        + "from authorities "
-                        + "where email = ?");
+                .authoritiesByUsernameQuery("select m.email, r.name "
+                        + "from member_role mr inner join member m on mr.id = m.id "
+                        +"inner join role r on mr.role_id = r.id "
+                        + "where m.email = ?");
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

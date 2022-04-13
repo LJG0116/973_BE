@@ -1,12 +1,14 @@
 package com.nst.fitnessu.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatRoomJoin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
