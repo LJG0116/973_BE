@@ -42,7 +42,7 @@ public class MemberController {
         //중복 회원 검증
         memberRepository.findByEmail(member.getEmail())
                 .ifPresent(m->{
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
                 });
 
         memberRepository.save(member);
