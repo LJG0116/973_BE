@@ -7,6 +7,8 @@ import com.nst.fitnessu.dto.LoginRequeustDto;
 import com.nst.fitnessu.dto.LoginResponseDto;
 import com.nst.fitnessu.repository.MemberRepository;
 import com.nst.fitnessu.service.MemberService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +31,11 @@ public class MemberController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody JoinRequestDto requestDto) {
+    @ApiOperation(value = "회원 가입")
+    public ResponseEntity<String> join(@RequestBody @ApiParam(value="회원 정보를 가진 객체",required = true)
+                                                   JoinRequestDto requestDto) {
 
         Member member = Member.builder()
-                .id(requestDto.getId())
                 .email(requestDto.getEmail())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .name(requestDto.getName())
@@ -46,16 +49,19 @@ public class MemberController {
                 });
 
         memberRepository.save(member);
-        return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
+
+        return new ResponseEntity<>("회원가입 완료", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequeustDto requeustDto) {
+    @ApiOperation(value = "로그인 기능")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @ApiParam(value="이메일 비밀번호가 필요함", required = true)
+                                                              LoginRequeustDto requestDto) {
 
-        Member member = memberRepository.findByEmail(requeustDto.getEmail())
+        Member member = memberRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
 
-        if (!passwordEncoder.matches(requeustDto.getPassword(), member.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
