@@ -1,8 +1,8 @@
 package com.nst.fitnessu.service;
 
 import com.nst.fitnessu.config.JwtTokenProvider;
-import com.nst.fitnessu.domain.Member;
-import com.nst.fitnessu.repository.MemberRepository;
+import com.nst.fitnessu.domain.User;
+import com.nst.fitnessu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,33 +14,33 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class UserService {
 
-    private final MemberRepository memberRepository;//
+    private final UserRepository userRepository;//
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider jwtTokenProvider;
     //회원가입
     @Transactional
-    public Long join(Member member){
+    public Long join(User user){
         //같은 이름이 있는 중복 x
-        validateDuplicateMember(member);
-        memberRepository.save(member);
-        return member.getId();
+        validateDuplicateMember(user);
+        userRepository.save(user);
+        return user.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
-        memberRepository.findByEmail(member.getEmail())
+    private void validateDuplicateMember(User user) {
+        userRepository.findByEmail(user.getEmail())
                 .ifPresent(m->{
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
     }
 
-    public List<Member> findMembers(){
-        return memberRepository.findAll();
+    public List<User> findUsers(){
+        return userRepository.findAll();
     }
 
-    public Optional<Member> findOne(String email) {
-        return memberRepository.findByEmail(email);
+    public Optional<User> findOne(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }

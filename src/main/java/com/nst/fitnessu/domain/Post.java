@@ -3,9 +3,7 @@ package com.nst.fitnessu.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +18,8 @@ public class Post {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    private Member member;
+    @JoinColumn(name="user_id")
+    private User user;
 
     @Embedded
     private Type type;
@@ -44,9 +42,9 @@ public class Post {
 
 
     //연관관계 메서드
-    public void setMember(Member member) {
-        this.member = member;
-        member.getPosts().add(this);
+    public void setMember(User user) {
+        this.user = user;
+        user.getPosts().add(this);
     }
 
 }

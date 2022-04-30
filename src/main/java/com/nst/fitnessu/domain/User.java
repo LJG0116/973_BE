@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Member implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "user_id")
     private Long id;
 
     private String email;
@@ -31,7 +31,7 @@ public class Member implements UserDetails {
 
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
     //-----------------------인증관련--------------------------------

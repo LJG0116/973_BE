@@ -4,13 +4,13 @@ spring:
       matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:8000/tp?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mariadb://localhost:8000/fitnessu?characterEncoding=UTF-8&serverTimezone=UTC
     username: tp
-    password: PEL1xE
+    password: koP7X5
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true #To beautify or pretty print the SQL
