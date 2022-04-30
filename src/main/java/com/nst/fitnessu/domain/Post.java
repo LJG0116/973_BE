@@ -42,7 +42,7 @@ public class Post {
 
 
     //연관관계 메서드
-    public void setMember(User user) {
+    public void setUser(User user) {
         this.user = user;
         user.getPosts().add(this);
     }

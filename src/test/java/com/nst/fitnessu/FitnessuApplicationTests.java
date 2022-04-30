@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class FitnessuApplicationTests {
 
+	@Test
 	void contextLoads() {
 	}
 

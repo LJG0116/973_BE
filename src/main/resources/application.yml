@@ -1,15 +1,12 @@
 spring:
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: jdbc:mysql://fitnessu-db.cqgux8nf2jkp.ap-northeast-2.rds.amazonaws.com:3306/fitnessu-DB
+    url: jdbc:mysql://fitnessu-db.cqgux8nf2jkp.ap-northeast-2.rds.amazonaws.com:3306/fitnessu?serverTimezone=Asia/Seoul
     username: admin
     password: tjrwlswntkdwnsrb1!
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -23,3 +20,4 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+

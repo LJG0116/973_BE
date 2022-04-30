@@ -21,7 +21,7 @@ import java.util.Collections;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserRepository userRepository;
