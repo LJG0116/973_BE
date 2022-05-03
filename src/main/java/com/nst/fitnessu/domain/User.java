@@ -27,12 +27,20 @@ public class User implements UserDetails {
 
     private String password;
 
-    private String name;
+    private String nickname;
 
     private Boolean enabled;
 
+    //private String refreshToken;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
+
+//    //refreshToken 갱신
+//    public void setRefreshToken(String refreshToken) {
+//        this.refreshToken=refreshToken;
+//    }
+
 
     //-----------------------인증관련--------------------------------
     @ElementCollection(fetch = FetchType.EAGER)
