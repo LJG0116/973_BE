@@ -18,8 +18,12 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -49,10 +53,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 .antMatchers("/hello2").authenticated()  // 인증권한이 필요한 페이지.
-                .anyRequest().permitAll()     // 나머지 모든 요청 허용  ( 생략 가능 )
+                .anyRequest().permitAll()// 나머지 모든 요청 허용  ( 생략 가능 )
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+                        UsernamePasswordAuthenticationFilter.class)
+                .cors();
         // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration=new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://3.39.40.188:8080"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("POST","GET","PUT"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("content-type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 }
