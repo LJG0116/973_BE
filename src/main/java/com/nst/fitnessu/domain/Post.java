@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -26,20 +27,14 @@ public class Post {
 
     private String title;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "content_id")
-    private Content content;
-
-    @OneToMany(mappedBy = "post")
-    private List<Image> images;
-
     @OneToMany(mappedBy = "post")
     private List<Area> areas;
 
+    @OneToMany(mappedBy = "post")
+    private List<Category> categories;
     private int viewCount;
 
     private LocalDateTime postDate;//
-
 
     //연관관계 메서드
     public void setUser(User user) {
