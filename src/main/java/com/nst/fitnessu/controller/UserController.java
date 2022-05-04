@@ -33,7 +33,7 @@ public class UserController {
         User user = User.builder()
                 .email(requestDto.getEmail())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
-                .nickname(requestDto.getName())
+                .nickname(requestDto.getNickname())
                 .roles(Collections.singletonList("ROLE_USER"))
                 .build();
 
