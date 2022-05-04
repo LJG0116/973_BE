@@ -32,6 +32,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<Category> categories;
+
     private int viewCount;
 
     private LocalDateTime postDate;//
