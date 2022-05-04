@@ -13,6 +13,6 @@ public class JoinRequestDto {
 
     private String confirmPassword;
 
-    private String name;
+    private String nickname;
 
 }
