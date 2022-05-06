@@ -3,6 +3,7 @@ package com.nst.fitnessu.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +16,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
-
+    private MessageType messageType;
     private String content;
     private LocalDateTime messageTime;
 
@@ -26,4 +27,10 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    private int sessionCount;
+
+
+
+
 }
