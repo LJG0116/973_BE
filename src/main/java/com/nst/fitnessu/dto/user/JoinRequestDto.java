@@ -1,4 +1,4 @@
-package com.nst.fitnessu.dto;
+package com.nst.fitnessu.dto.user;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
