@@ -1,9 +1,10 @@
 package com.nst.fitnessu.controller;
 
-import com.nst.fitnessu.config.JwtTokenProvider;
 import com.nst.fitnessu.domain.User;
 import com.nst.fitnessu.dto.*;
-import com.nst.fitnessu.repository.UserRepository;
+import com.nst.fitnessu.dto.user.JoinRequestDto;
+import com.nst.fitnessu.dto.user.LoginRequestDto;
+import com.nst.fitnessu.dto.user.LoginResponseDto;
 import com.nst.fitnessu.service.LoginService;
 import com.nst.fitnessu.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +30,7 @@ public class UserController {
     @PostMapping("/join")
     @ApiOperation(value = "회원 가입")
     public ResponseEntity<String> join(@RequestBody @ApiParam(value="회원 정보를 가진 객체",required = true)
-                                                   JoinRequestDto requestDto) {
+                                               JoinRequestDto requestDto) {
         User user = User.builder()
                 .email(requestDto.getEmail())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
@@ -43,6 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/email")
+    @ApiOperation(value = "이메일 중복 체크")
     public ResponseEntity<ResultResponse> checkEmail(@RequestBody String email) {
         userService.validateDuplicateEmail(email);
         ResultResponse resultResponse = new ResultResponse(200, "이메일 중복 없음");
@@ -50,8 +52,9 @@ public class UserController {
     }
 
     @GetMapping("/nickname")
-    public ResponseEntity<ResultResponse> checkNickname(@RequestBody String email) {
-        userService.validateDuplicateNickname(email);
+    @ApiOperation(value = "닉네임 중복 체크")
+    public ResponseEntity<ResultResponse> checkNickname(@RequestBody String nickname) {
+        userService.validateDuplicateNickname(nickname);
         ResultResponse resultResponse = new ResultResponse(200, "닉네임 중복 없음");
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
@@ -59,7 +62,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation(value = "로그인 기능")
     public ResponseEntity<ResultResponse> login(@RequestBody @ApiParam(value="이메일 비밀번호가 필요함", required = true)
-                                                              LoginRequeustDto requestDto) {
+                                                        LoginRequestDto requestDto) {
         LoginResponseDto loginResponseDto = loginService.login(requestDto.getEmail(), requestDto.getPassword());
         ResultResponse<LoginResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("로그인 성공",loginResponseDto);
