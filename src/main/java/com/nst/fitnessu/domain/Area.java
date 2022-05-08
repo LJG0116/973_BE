@@ -3,6 +3,7 @@ package com.nst.fitnessu.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,7 +16,8 @@ public class Area {
     @Column(name = "area_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    String name;
+
+    @OneToMany(mappedBy = "area")
+    private List<AreaPost> areaPosts;
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,7 +20,8 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Post> posts;
 }

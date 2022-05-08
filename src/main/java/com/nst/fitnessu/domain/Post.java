@@ -27,15 +27,20 @@ public class Post {
 
     private String title;
 
-    @OneToMany(mappedBy = "post")
-    private List<Area> areas;
+    private String content;
 
-    @OneToMany(mappedBy = "post")
-    private List<Category> categories;
+    private String author;
 
     private int viewCount;
 
     private LocalDateTime postDate;//
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AreaPost> areaPosts;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id")
+    private Category category;
 
     //연관관계 메서드
     public void setUser(User user) {
@@ -43,4 +48,8 @@ public class Post {
         user.getPosts().add(this);
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+        category.getPosts().add(this);
+    }
 }

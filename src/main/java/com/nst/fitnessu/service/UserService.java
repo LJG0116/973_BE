@@ -28,21 +28,21 @@ public class UserService {
     public void validateDuplicateEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(m->{
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
                 });
     }
 
     public void validateDuplicateNickname(String nickname) {
         userRepository.findByEmail(nickname)
                 .ifPresent(m->{
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
                 });
     }
 
     private void validateDuplicateMember(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(m->{
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
+                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
                 });
     }
 
