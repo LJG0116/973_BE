@@ -25,8 +25,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.nst.fitnessu.controller"))
                 .paths(PathSelectors.any())
-                .build()
-                ;
+                .build();
     }
     private SecurityContext securityContext() {
         return SecurityContext.builder()
