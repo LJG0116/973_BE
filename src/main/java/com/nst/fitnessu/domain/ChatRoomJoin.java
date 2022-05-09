@@ -21,4 +21,11 @@ public class ChatRoomJoin {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
+
+    public ChatRoomJoin(User user,ChatRoom chatRoom){
+        super();
+        this.user=user;
+        this.chatRoom=chatRoom;
+    }
+
 }
