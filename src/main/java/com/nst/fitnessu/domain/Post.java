@@ -1,5 +1,6 @@
 package com.nst.fitnessu.domain;
 
+import com.nst.fitnessu.dto.post.UpdatePostRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -51,5 +52,19 @@ public class Post {
     public void setCategory(Category category) {
         this.category = category;
         category.getPosts().add(this);
+    }
+
+    public void deleteCategory(){
+        category.getPosts().remove(this);
+        this.category=null;
+    }
+    public void deleteArea() {
+        this.areaPosts.clear();
+    }
+    public void updatePost(UpdatePostRequestDto requestDto) {
+        this.author=requestDto.getAuthor();
+        this.postDate=LocalDateTime.now();
+        this.title=requestDto.getTitle();
+        this.content=requestDto.getText();
     }
 }

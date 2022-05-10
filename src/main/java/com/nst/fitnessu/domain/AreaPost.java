@@ -36,4 +36,9 @@ public class AreaPost {
         post.getAreaPosts().add(this);
     }
 
+    public void deleteAreaPost(){
+        this.area.getAreaPosts().remove(this);
+        this.post=null;
+        this.area=null;
+    }
 }

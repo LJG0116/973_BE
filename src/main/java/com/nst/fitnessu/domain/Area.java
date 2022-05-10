@@ -18,6 +18,6 @@ public class Area {
 
     String name;
 
-    @OneToMany(mappedBy = "area")
+    @OneToMany(mappedBy = "area",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AreaPost> areaPosts;
 }

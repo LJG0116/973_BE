@@ -1,9 +1,11 @@
 package com.nst.fitnessu.dto.post;
 
 import com.nst.fitnessu.domain.Post;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class PostListResponseDto {
 
     private Long id;

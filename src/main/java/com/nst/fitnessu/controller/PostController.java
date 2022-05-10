@@ -3,10 +3,7 @@ package com.nst.fitnessu.controller;
 import com.nst.fitnessu.domain.Post;
 import com.nst.fitnessu.domain.Type;
 import com.nst.fitnessu.dto.ResultResponse;
-import com.nst.fitnessu.dto.post.CreatePostRequestDto;
-import com.nst.fitnessu.dto.post.PostListResponseDto;
-import com.nst.fitnessu.dto.post.ViewPostRequestDto;
-import com.nst.fitnessu.dto.post.ViewPostResponseDto;
+import com.nst.fitnessu.dto.post.*;
 import com.nst.fitnessu.dto.user.LoginResponseDto;
 import com.nst.fitnessu.service.PostService;
 import com.nst.fitnessu.service.UserService;
@@ -30,7 +27,6 @@ import java.util.stream.Stream;
 public class PostController {
 
     private final PostService postService;
-    private final UserService userService;
 
     @PostMapping("/create/coach")
     @ApiOperation(value = "코치 글쓰기")
@@ -50,23 +46,41 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/view/list/{page}")
-    @ApiOperation(value = "게시글 목록")
-    public ResponseEntity<ResultResponse> viewPostList(@PathVariable @ApiParam Integer page) {
-        List<PostListResponseDto> pageList=postService.findAllByOrderByIdDesc(page,10);
-        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("글목록 조회",pageList);
-        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
-    }
+//    @GetMapping("/view/list/{page}")
+//    @ApiOperation(value = "게시글 목록")
+//    public ResponseEntity<ResultResponse> viewPostList(@PathVariable @ApiParam Integer page) {
+//        List<PostListResponseDto> pageList=postService.findAllByOrderByIdDesc(page,10);
+//        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
+//        resultResponse.successResponse("글목록 조회",pageList);
+//        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+//    }
 
     @GetMapping("/view/{id}")
     @ApiOperation(value = "게시글 조회")
-    public ResponseEntity<ResultResponse> viewPostList(@PathVariable @ApiParam String id) {
+    public ResponseEntity<ResultResponse> viewPostList(@PathVariable @ApiParam Long id) {
         //임시
         ViewPostRequestDto requestDto = new ViewPostRequestDto(id);
         ViewPostResponseDto responseDto=postService.findPost(requestDto);
         ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("게시글 조회",responseDto);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    @ApiOperation(value = "게시글 수정")
+    public ResponseEntity<ResultResponse> updatePostList(@RequestBody @ApiParam UpdatePostRequestDto requestDto) {
+        //임시
+        UpdatePostResponseDto responseDto=postService.updatePost(requestDto);
+        ResultResponse<UpdatePostResponseDto> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("게시글 조회",responseDto);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ApiOperation(value = "게시글 삭제")
+    public ResponseEntity<ResultResponse> deletePostList(@PathVariable @ApiParam Long id) {
+        postService.deletePost(id);
+        ResultResponse resultResponse=new ResultResponse(200,"게시글 삭제");
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 //    @GetMapping("/view")

@@ -43,17 +43,17 @@ public class UserController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.CREATED);
     }
 
-    @GetMapping("/email")
+    @GetMapping("/email/{email}")
     @ApiOperation(value = "이메일 중복 체크")
-    public ResponseEntity<ResultResponse> checkEmail(@RequestBody @ApiParam(value="이메일", required = true) String email) {
+    public ResponseEntity<ResultResponse> checkEmail(@PathVariable @ApiParam(value="이메일", required = true) String email) {
         userService.validateDuplicateEmail(email);
         ResultResponse resultResponse = new ResultResponse(200, "이메일 중복 없음");
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/nickname")
+    @GetMapping("/nickname/{nickname}")
     @ApiOperation(value = "닉네임 중복 체크")
-    public ResponseEntity<ResultResponse> checkNickname(@RequestBody @ApiParam(value="닉네임",required = true) String nickname) {
+    public ResponseEntity<ResultResponse> checkNickname(@PathVariable @ApiParam(value="닉네임",required = true) String nickname) {
         userService.validateDuplicateNickname(nickname);
         ResultResponse resultResponse = new ResultResponse(200, "닉네임 중복 없음");
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
