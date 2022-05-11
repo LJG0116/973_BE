@@ -30,7 +30,7 @@ public class PostService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public Long createPost(CreatePostRequestDto requestDto,Type type) {
+    public ViewPostResponseDto createPost(CreatePostRequestDto requestDto,Type type) {
 
         User user = userRepository.findByNickname(requestDto.getAuthor())
                 .orElseThrow(()->new IllegalArgumentException("해당 닉네임을 가진 유저가 존재하지 않습니다."));
@@ -61,19 +61,19 @@ public class PostService {
             areaPost.setPost(post);
             areaPostRepository.save(areaPost);
         }
-        return post.getId();
+        return new ViewPostResponseDto(post, requestDto.getArea());
     }
 
-//    public List<PostListResponseDto> findAllByOrderByIdDesc(Integer pageNum, Integer postsPerPage) {
-//        Page<Post> page = postRepository.findAll(
-//                // PageRequest의 page는 0부터 시작
-//                PageRequest.of(pageNum - 1, postsPerPage,
-//                        Sort.by(Sort.Direction.DESC, "post_id")
-//                ));
-//        return page.stream()
-//                .map(PostListResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
+    public List<PostListResponseDto> viewList(Type type,Integer pageNum, Integer postsPerPage) {
+        Page<Post> page = postRepository.findByType(type,
+                // PageRequest의 page는 0부터 시작
+                PageRequest.of(pageNum - 1, postsPerPage,
+                        Sort.by(Sort.Direction.DESC, "postDate")
+                ));
+        return page.stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
     public ViewPostResponseDto findPost(ViewPostRequestDto requestDto) {
         Post post = postRepository.findById((requestDto.getPostId()))

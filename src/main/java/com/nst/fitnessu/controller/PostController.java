@@ -31,29 +31,38 @@ public class PostController {
     @PostMapping("/create/coach")
     @ApiOperation(value = "코치 글쓰기")
     public ResponseEntity<ResultResponse> createCoachPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
-        Long postId=postService.createPost(requestDto,Type.coach);
-        ResultResponse<String> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("글쓰기 성공",postId.toString());
+        ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
+        ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("게시글 조회",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
     @PostMapping("/create/player")
     @ApiOperation(value = "플레이어 글쓰기")
     public ResponseEntity<ResultResponse> createPlayerPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
-        Long postId=postService.createPost(requestDto,Type.player);
-        ResultResponse<String> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("글쓰기 성공",postId.toString());
+        ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.player);
+        ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("게시글 조회",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-//    @GetMapping("/view/list/{page}")
-//    @ApiOperation(value = "게시글 목록")
-//    public ResponseEntity<ResultResponse> viewPostList(@PathVariable @ApiParam Integer page) {
-//        List<PostListResponseDto> pageList=postService.findAllByOrderByIdDesc(page,10);
-//        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
-//        resultResponse.successResponse("글목록 조회",pageList);
-//        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
-//    }
+    @GetMapping("/view/list/coach/{page}")
+    @ApiOperation(value = "코치 게시글 목록")
+    public ResponseEntity<ResultResponse> viewCoachPostList(@PathVariable @ApiParam Integer page) {
+        List<PostListResponseDto> pageList=postService.viewList(Type.coach,page,10);
+        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("코치 글목록 조회",pageList);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/view/list/player/{page}")
+    @ApiOperation(value = "플레이어 게시글 목록")
+    public ResponseEntity<ResultResponse> viewPlayerPostList(@PathVariable @ApiParam Integer page) {
+        List<PostListResponseDto> pageList=postService.viewList(Type.player,page,10);
+        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("플레이어 글목록 조회",pageList);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
 
     @GetMapping("/view/{id}")
     @ApiOperation(value = "게시글 조회")
@@ -72,7 +81,7 @@ public class PostController {
         //임시
         UpdatePostResponseDto responseDto=postService.updatePost(requestDto);
         ResultResponse<UpdatePostResponseDto> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("게시글 조회",responseDto);
+        resultResponse.successResponse("게시글 수정",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 

@@ -23,7 +23,7 @@ public class Post {
     @JoinColumn(name="user_id")
     private User user;
 
-    @Embedded
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     private String title;
