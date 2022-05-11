@@ -28,7 +28,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/create/coach")
+    @PostMapping("/coach")
     @ApiOperation(value = "코치 글쓰기")
     public ResponseEntity<ResultResponse> createCoachPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
         ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
@@ -37,7 +37,7 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/create/player")
+    @PostMapping("/player")
     @ApiOperation(value = "플레이어 글쓰기")
     public ResponseEntity<ResultResponse> createPlayerPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
         ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.player);
@@ -46,7 +46,7 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/view/list/coach/{page}")
+    @GetMapping("/coach/{page}")
     @ApiOperation(value = "코치 게시글 목록")
     public ResponseEntity<ResultResponse> viewCoachPostList(@PathVariable @ApiParam Integer page) {
         List<PostListResponseDto> pageList=postService.viewList(Type.coach,page,10);
@@ -55,7 +55,7 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/view/list/player/{page}")
+    @GetMapping("/player/{page}")
     @ApiOperation(value = "플레이어 게시글 목록")
     public ResponseEntity<ResultResponse> viewPlayerPostList(@PathVariable @ApiParam Integer page) {
         List<PostListResponseDto> pageList=postService.viewList(Type.player,page,10);
@@ -64,7 +64,7 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/view/{id}")
+    @GetMapping("/{id}")
     @ApiOperation(value = "게시글 조회")
     public ResponseEntity<ResultResponse> viewPostList(@PathVariable @ApiParam Long id) {
         //임시
@@ -75,7 +75,7 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/update")
+    @PutMapping()
     @ApiOperation(value = "게시글 수정")
     public ResponseEntity<ResultResponse> updatePostList(@RequestBody @ApiParam UpdatePostRequestDto requestDto) {
         //임시
@@ -85,7 +85,7 @@ public class PostController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "게시글 삭제")
     public ResponseEntity<ResultResponse> deletePostList(@PathVariable @ApiParam Long id) {
         postService.deletePost(id);
