@@ -20,6 +20,11 @@ public class AdminService {
 
     @Transactional
     public Long createCategory(String name) {
+        categoryRepository.findByName(name)
+                .ifPresent(m->{
+                    throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+                });
+
         Category category=Category.builder()
                 .name(name)
                 .posts(new ArrayList<>())
@@ -30,6 +35,12 @@ public class AdminService {
 
     @Transactional
     public Long createArea(String name) {
+
+        areaRepository.findByName(name)
+                .ifPresent(m->{
+                    throw new IllegalArgumentException("이미 존재하는지역 입니다.");
+                });
+
         Area area = Area.builder()
                 .name(name)
                 .areaPosts(new ArrayList<>())
