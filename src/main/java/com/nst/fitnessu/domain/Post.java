@@ -48,6 +48,8 @@ public class Post {
 
     public void updatePost(UpdatePostRequestDto requestDto) {
         this.author=requestDto.getAuthor();
+        this.category= requestDto.getCategory();
+        this.area= requestDto.getArea();
         this.postDate=LocalDateTime.now();
         this.title=requestDto.getTitle();
         this.content=requestDto.getText();
