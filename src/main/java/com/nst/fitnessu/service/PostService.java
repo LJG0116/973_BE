@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,10 +22,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final AreaRepository areaRepository;
-    private final CategoryRepository categoryRepository;
-    private final AreaPostRepository areaPostRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public ViewPostResponseDto createPost(CreatePostRequestDto requestDto,Type type) {
@@ -36,32 +30,20 @@ public class PostService {
                 .orElseThrow(()->new IllegalArgumentException("해당 닉네임을 가진 유저가 존재하지 않습니다."));
 
         Post post = Post.builder()
-                .user(user)
+                .area(requestDto.getArea())
+                .category(requestDto.getCategory())
                 .title(requestDto.getTitle())
                 .author(requestDto.getAuthor())
                 .postDate(LocalDateTime.now())
                 .viewCount(0)
-                .areaPosts(new ArrayList<>())
                 .type(type)
                 .content(requestDto.getText())
                 .build();
 
-        Category category=categoryRepository.findByName(requestDto.getCategory())
-                .orElseThrow(()->new IllegalArgumentException("해당 카테고리는 없는 카테고리 입니다."));
-        post.setCategory(category);
-
+        post.setUser(user);
         postRepository.save(post);
 
-        for(String request : requestDto.getArea()){
-            Area area=areaRepository.findByName(request)
-                    .orElseThrow(()->new IllegalArgumentException("해당 지역은 없는 지역입니다."));
-
-            AreaPost areaPost=new AreaPost();
-            areaPost.setArea(area);
-            areaPost.setPost(post);
-            areaPostRepository.save(areaPost);
-        }
-        return new ViewPostResponseDto(post, requestDto.getArea());
+        return new ViewPostResponseDto(post);
     }
 
     public List<PostListResponseDto> viewList(Type type,Integer pageNum, Integer postsPerPage) {
@@ -79,13 +61,7 @@ public class PostService {
         Post post = postRepository.findById((requestDto.getPostId()))
                 .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
 
-        List<AreaPost> areaPostList = post.getAreaPosts();
-        List<String> area = new ArrayList<>();
-        for(AreaPost areaPost : areaPostList){
-            area.add(areaPost.getArea().getName());
-        }
-
-        ViewPostResponseDto responseDto = new ViewPostResponseDto(post,area);
+        ViewPostResponseDto responseDto = new ViewPostResponseDto(post);
         return responseDto;
     }
 
@@ -97,27 +73,7 @@ public class PostService {
 
         post.updatePost(requestDto);
 
-        post.deleteCategory();
-        Category category=categoryRepository.findByName(requestDto.getCategory())
-                .orElseThrow(()->new IllegalArgumentException("해당 카테고리는 없는 카테고리 입니다."));
-        post.setCategory(category);
-
-        for(AreaPost areaPost : post.getAreaPosts()){
-            areaPost.deleteAreaPost();
-        }
-        post.deleteArea();
-
-        for(String request : requestDto.getArea()){
-            Area area=areaRepository.findByName(request)
-                    .orElseThrow(()->new IllegalArgumentException("해당 지역은 없는 지역입니다."));
-
-            AreaPost areaPost=new AreaPost();
-            areaPost.setArea(area);
-            areaPost.setPost(post);
-            areaPostRepository.save(areaPost);
-        }
-
-        UpdatePostResponseDto responseDto = new UpdatePostResponseDto(post,requestDto.getArea());
+        UpdatePostResponseDto responseDto = new UpdatePostResponseDto(post);
         return responseDto;
     }
 
@@ -126,10 +82,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
 
-        post.deleteCategory();;
-        for(AreaPost areaPost : post.getAreaPosts()){
-            areaPost.deleteAreaPost();
-        }
+        post.deletePost();
         postRepository.deleteById(id);
     }
 }

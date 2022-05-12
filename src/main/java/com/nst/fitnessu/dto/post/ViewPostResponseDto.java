@@ -15,16 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ViewPostResponseDto {
     String title;
-    List<String> area;
-    String category;
+    String[] area;
+    String[] category;
     String text;
     String author;
     LocalDateTime date;
 
-    public ViewPostResponseDto(Post post, List<String> area) {
+    public ViewPostResponseDto(Post post) {
         this.title = post.getTitle();
-        this.area = area;
-        this.category = post.getCategory().getName();
+        this.area = post.getArea().split("#");
+        this.category = post.getCategory().split("#");
         this.text = post.getContent();
         this.author = post.getAuthor();
         this.date = post.getPostDate();

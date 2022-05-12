@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class UpdatePostRequestDto {
     String title;
-    List<String> area;
+    String area;
     String category;
     String text;
     String author;

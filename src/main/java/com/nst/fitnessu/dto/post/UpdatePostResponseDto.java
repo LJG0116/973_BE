@@ -16,18 +16,18 @@ import java.util.List;
 public class UpdatePostResponseDto {
 
     String title;
-    List<String> area;
-    String category;
+    String[] area;
+    String[] category;
     String text;
     String author;
     LocalDateTime date;
 
-    public UpdatePostResponseDto(Post post, List<String> area) {
+    public UpdatePostResponseDto(Post post) {
         this.title = post.getTitle();
-        this.area = area;
-        this.category = post.getCategory().getName();
+        this.area = post.getArea().split("#");
+        this.category = post.getCategory().split("#");
         this.text = post.getContent();
-        this.author = post.getAuthor();
+        this.author = post.getUser().getNickname();
         this.date = post.getPostDate();
     }
 }

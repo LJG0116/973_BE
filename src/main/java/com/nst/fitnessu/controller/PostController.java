@@ -1,13 +1,9 @@
 package com.nst.fitnessu.controller;
 
-import com.nst.fitnessu.domain.Post;
 import com.nst.fitnessu.domain.Type;
 import com.nst.fitnessu.dto.ResultResponse;
 import com.nst.fitnessu.dto.post.*;
-import com.nst.fitnessu.dto.user.LoginResponseDto;
 import com.nst.fitnessu.service.PostService;
-import com.nst.fitnessu.service.UserService;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor

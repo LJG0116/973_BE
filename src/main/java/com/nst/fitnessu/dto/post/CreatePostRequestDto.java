@@ -7,9 +7,8 @@ import java.util.List;
 @Data
 public class CreatePostRequestDto {
     String title;
-    List<String> area;
+    String area;
     String category;
     String text;
-    String userId;
     String author;
 }
