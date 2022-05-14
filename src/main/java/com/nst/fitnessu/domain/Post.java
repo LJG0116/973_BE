@@ -1,5 +1,6 @@
 package com.nst.fitnessu.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;

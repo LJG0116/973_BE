@@ -1,7 +1,13 @@
 spring:
+  #jackson:
+  #  serialization:
+  #    fail-on-empty-beans: false
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
   thymeleaf:
-    prefix: classpath:templates/
-    suffix: .html
     cache: false
   mvc:
     pathmatch:
