@@ -50,7 +50,7 @@ public class Post {
         this.author=requestDto.getAuthor();
         this.category= requestDto.getCategory();
         this.area= requestDto.getArea();
-        this.postDate=LocalDateTime.now();
+        this.postDate=LocalDateTime.now().withNano(0);
         this.title=requestDto.getTitle();
         this.content=requestDto.getText();
     }

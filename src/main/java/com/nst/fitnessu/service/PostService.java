@@ -24,7 +24,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ViewPostResponseDto createPost(CreatePostRequestDto requestDto,Type type) {
+    public CreatePostResponseDto createPost(CreatePostRequestDto requestDto,Type type) {
 
         User user = userRepository.findByNickname(requestDto.getAuthor())
                 .orElseThrow(()->new IllegalArgumentException("해당 닉네임을 가진 유저가 존재하지 않습니다."));
@@ -34,7 +34,7 @@ public class PostService {
                 .category(requestDto.getCategory())
                 .title(requestDto.getTitle())
                 .author(requestDto.getAuthor())
-                .postDate(LocalDateTime.now())
+                .postDate(LocalDateTime.now().withNano(0))
                 .viewCount(0)
                 .type(type)
                 .content(requestDto.getText())
@@ -43,7 +43,7 @@ public class PostService {
         post.setUser(user);
         postRepository.save(post);
 
-        return new ViewPostResponseDto(post);
+        return new CreatePostResponseDto(post.getId());
     }
 
     public List<PostListResponseDto> viewList(Type type,Integer pageNum, Integer postsPerPage) {

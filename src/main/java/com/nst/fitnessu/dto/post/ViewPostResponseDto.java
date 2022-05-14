@@ -19,6 +19,7 @@ public class ViewPostResponseDto {
     String[] category;
     String text;
     String author;
+    String type;
     LocalDateTime date;
 
     public ViewPostResponseDto(Post post) {
@@ -28,5 +29,6 @@ public class ViewPostResponseDto {
         this.text = post.getContent();
         this.author = post.getAuthor();
         this.date = post.getPostDate();
+        this.type = post.getType().toString();
     }
 }

@@ -21,11 +21,31 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/player")
+    @ApiOperation(value = "플레이어 메인 화면목록")
+    public ResponseEntity<ResultResponse> mainPlayerPostList() {
+        List<PostListResponseDto> pageList=postService.viewList(Type.player,1,5);
+        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("플레이어 메인",pageList);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
+
+
+
+    @GetMapping("/coach")
+    @ApiOperation(value = "코치 메인 화면목록")
+    public ResponseEntity<ResultResponse> mainCoachPostList() {
+        List<PostListResponseDto> pageList=postService.viewList(Type.coach,1,5);
+        ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
+        resultResponse.successResponse("코치 메인",pageList);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
+
     @PostMapping("/coach")
     @ApiOperation(value = "코치 글쓰기")
     public ResponseEntity<ResultResponse> createCoachPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
-        ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
-        ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
+        CreatePostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
+        ResultResponse<CreatePostResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("코치 게시글 작성",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
@@ -33,8 +53,8 @@ public class PostController {
     @PostMapping("/player")
     @ApiOperation(value = "플레이어 글쓰기")
     public ResponseEntity<ResultResponse> createPlayerPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
-        ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.player);
-        ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
+        CreatePostResponseDto responseDto=postService.createPost(requestDto,Type.player);
+        ResultResponse<CreatePostResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("플레이어 게시글 작성",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
