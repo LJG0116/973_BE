@@ -26,7 +26,7 @@ public class PostController {
     public ResponseEntity<ResultResponse> createCoachPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
         ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
         ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("게시글 조회",responseDto);
+        resultResponse.successResponse("코치 게시글 작성",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
@@ -35,7 +35,7 @@ public class PostController {
     public ResponseEntity<ResultResponse> createPlayerPost(@RequestBody @ApiParam CreatePostRequestDto requestDto) {
         ViewPostResponseDto responseDto=postService.createPost(requestDto,Type.player);
         ResultResponse<ViewPostResponseDto> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("게시글 조회",responseDto);
+        resultResponse.successResponse("플레이어 게시글 작성",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
