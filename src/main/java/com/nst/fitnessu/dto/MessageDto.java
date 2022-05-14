@@ -11,8 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 @ApiModel(value = "로그인 response 정보", description = "엑세스 토큰과 메세지 리턴")
 public class MessageDto {
-    private Long send;
-    private Long receive;
-    private String roomId;
-    private Message message;
+    private Long userId;
+    private Long roomId;
+    private String content;
 }

@@ -1,6 +1,7 @@
 package com.nst.fitnessu.controller;
 
 import com.nst.fitnessu.domain.ChatRoom;
+import com.nst.fitnessu.domain.Message;
 import com.nst.fitnessu.domain.User;
 import com.nst.fitnessu.dto.MessageDto;
 import com.nst.fitnessu.service.ChatService;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Array;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,11 +24,9 @@ import java.util.List;
 public class StompChatController {
     @Autowired
     private SimpMessagingTemplate template;
-    private final UserService userService;
     private final ChatService chatService;
-
-
-
+    private final UserService userService;
+    /*
     @MessageMapping(value ="/chat/enter")
     public ChatRoom enter(MessageDto messageDTO){
         ChatRoom chatRoom;
@@ -50,13 +52,21 @@ public class StompChatController {
         }
         return chatRoom;
     }
+     */
     @Transactional
     @MessageMapping(value = "/chat/exit")
     public void exit(MessageDto message) {
     }
 
+    @Transactional
     @MessageMapping(value = "/chat/message")
-    public void message(MessageDto message){
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+    public void sendMessage(MessageDto messageDto){
+        Message message=new Message( messageDto.getContent()
+                ,LocalDateTime.now()
+                ,chatService.findById(messageDto.getRoomId())
+                ,userService.findById(messageDto.getUserId()));
+        chatService.saveMessage(message);
+        template.convertAndSend("/sub/chat/room/" + messageDto);
     }
+
 }

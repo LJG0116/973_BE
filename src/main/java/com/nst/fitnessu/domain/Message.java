@@ -16,8 +16,6 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
-
-    private MessageType messageType;
     private String content;
     private LocalDateTime messageTime;
 
@@ -28,6 +26,11 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
+    public Message (String content,LocalDateTime messageTime,ChatRoom chatRoom,User user){
+        this.content=content;
+        this.messageTime=messageTime;
+        this.chatRoom=chatRoom;
+        this.user=user;
+    }
 
 }

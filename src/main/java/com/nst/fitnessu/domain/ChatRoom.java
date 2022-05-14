@@ -23,4 +23,9 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom")
     private List<Message> message;
 
+    public ChatRoom(Long id){
+        super();
+        this.id=id;
+    }
+
 }
