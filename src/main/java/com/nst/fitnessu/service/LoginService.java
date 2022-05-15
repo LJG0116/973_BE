@@ -2,15 +2,12 @@ package com.nst.fitnessu.service;
 
 import com.nst.fitnessu.config.JwtTokenProvider;
 import com.nst.fitnessu.domain.User;
-import com.nst.fitnessu.dto.LoginResponseDto;
+import com.nst.fitnessu.dto.user.LoginResponseDto;
 import com.nst.fitnessu.repository.UserRepository;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,6 +26,7 @@ public class LoginService {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        return new LoginResponseDto(jwtTokenProvider.createJwtAccessToken(user.getEmail(),user.getRoles()));
+        return new LoginResponseDto(jwtTokenProvider.createJwtAccessToken(user.getEmail(),user.getRoles())
+        ,user.getId().toString(),user.getEmail(), user.getNickname());
     }
 }

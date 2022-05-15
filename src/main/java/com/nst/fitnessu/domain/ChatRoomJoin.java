@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 public class ChatRoomJoin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

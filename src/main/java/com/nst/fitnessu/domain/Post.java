@@ -1,6 +1,6 @@
 package com.nst.fitnessu.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.nst.fitnessu.dto.post.UpdatePostRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,25 +19,26 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
-    @Embedded
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     private String title;
 
-    @OneToMany(mappedBy = "post")
-    private List<Area> areas;
+    private String content;
 
-    @OneToMany(mappedBy = "post")
-    private List<Category> categories;
+    private String author;
 
     private int viewCount;
 
     private LocalDateTime postDate;//
+
+    private String area;
+
+    private String category;
 
     //연관관계 메서드
     public void setUser(User user) {
@@ -45,4 +46,17 @@ public class Post {
         user.getPosts().add(this);
     }
 
+    public void updatePost(UpdatePostRequestDto requestDto) {
+        this.author=requestDto.getAuthor();
+        this.category= requestDto.getCategory();
+        this.area= requestDto.getArea();
+        this.postDate=LocalDateTime.now().withNano(0);
+        this.title=requestDto.getTitle();
+        this.content=requestDto.getText();
+    }
+
+    public void deletePost(){
+        this.user.getPosts().remove(this);
+        this.user = null;
+    }
 }

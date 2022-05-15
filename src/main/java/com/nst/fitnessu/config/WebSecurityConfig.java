@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,6 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().mvcMatchers("/exception/**",
+                "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**");
+    }
+
     // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
-                .antMatchers("/hello2").authenticated()  // 인증권한이 필요한 페이지.
+                .antMatchers("/hello").authenticated()  // 인증권한이 필요한 페이지.
                 .anyRequest().permitAll()// 나머지 모든 요청 허용  ( 생략 가능 )
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

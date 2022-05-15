@@ -19,14 +19,15 @@ spring:
     #password: 0116
     password: tjrwlswntkdwnsrb1!
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
-       ddl-auto: create-drop
-       #ddl-auto: update
+      ddl-auto: create-drop
+#      ddl-auto: update
     properties:
-        hibernate:
-            show_sql: true
-            format_sql: true
+      hibernate:
+        #      show_sql: true
+        format_sql: true
 
 logging:
   level:
