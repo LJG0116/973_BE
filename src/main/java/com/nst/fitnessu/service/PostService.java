@@ -2,6 +2,7 @@ package com.nst.fitnessu.service;
 
 import com.nst.fitnessu.config.JwtTokenProvider;
 import com.nst.fitnessu.domain.*;
+import com.nst.fitnessu.dto.chat.RoomEnterRequestDto;
 import com.nst.fitnessu.dto.post.*;
 import com.nst.fitnessu.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -60,11 +61,15 @@ public class PostService {
     public ViewPostResponseDto findPost(ViewPostRequestDto requestDto) {
         Post post = postRepository.findById((requestDto.getPostId()))
                 .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
-
         ViewPostResponseDto responseDto = new ViewPostResponseDto(post);
         return responseDto;
     }
 
+    public User findPostInChat(RoomEnterRequestDto requestDto){
+        Post post = postRepository.findById((requestDto.getPostId()))
+                .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
+        return post.getUser();
+    }
 
     @Transactional
     public UpdatePostResponseDto updatePost(UpdatePostRequestDto requestDto) {

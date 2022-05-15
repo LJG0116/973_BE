@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private List<ChatRoomJoin> chatRoomJoins;
 
 
-    @JsonManagedReference
+    //@JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 

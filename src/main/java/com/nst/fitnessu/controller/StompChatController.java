@@ -1,9 +1,8 @@
 package com.nst.fitnessu.controller;
 
-import com.nst.fitnessu.domain.ChatRoom;
 import com.nst.fitnessu.domain.Message;
-import com.nst.fitnessu.domain.User;
-import com.nst.fitnessu.dto.MessageDto;
+import com.nst.fitnessu.dto.chat.ChatRoomMessageDto;
+import com.nst.fitnessu.dto.chat.MessageDto;
 import com.nst.fitnessu.service.ChatService;
 import com.nst.fitnessu.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,15 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,15 +32,17 @@ public class StompChatController {
 
     @Transactional
     @MessageMapping(value = "/chat/message")
-    public void sendMessage(@RequestBody MessageDto messageDto){
-        System.out.println("sendMessage");
-        messageDto.setContent("adsfadsf");
-        Message message=new Message( messageDto.getContent()
+    public void sendMessage(MessageDto messageDto){
+        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(messageDto.getUserId(), messageDto.getRoomId(), LocalDateTime.now(),messageDto.getContent());
+        System.out.println("sendMessage : " + chatRoomMessageDto.getContent());
+        //test
+       // messageDto.setContent("adsfadsf");
+        Message message=new Message( chatRoomMessageDto.getContent()
                 ,LocalDateTime.now()
-                ,chatService.findById(messageDto.getRoomId())
-                ,userService.findById(messageDto.getUserId()));
+                ,chatService.findById(chatRoomMessageDto.getRoomId())
+                ,userService.findById(chatRoomMessageDto.getRoomId())
+                .orElseThrow(()-> new IllegalArgumentException("없는 Id입니다.")));
         chatService.saveMessage(message);
-        simpMessageSendingOperation.convertAndSend("/sub/chat/room/"+messageDto.getRoomId(),messageDto);
+        simpMessageSendingOperation.convertAndSend("/sub/chat/room/"+chatRoomMessageDto.getRoomId(),chatRoomMessageDto);
     }
-
 }
