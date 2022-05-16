@@ -26,6 +26,8 @@ public class PostListResponseDto {
         this.nickname = post.getUser().getNickname();
         this.date=post.getPostDate();
         this.text=post.getContent();
+        this.area=post.getArea().split("#");
+        this.category=post.getCategory().split("#");
         this.type=post.getType().toString();
       //  this.viewCount=post.getViewCount();
     }
