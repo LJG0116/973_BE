@@ -11,6 +11,7 @@ public class UpdatePostRequestDto {
     String area;
     String category;
     String text;
-    String author;
+    String nickname;
+    Long userId;
     String postId;
 }

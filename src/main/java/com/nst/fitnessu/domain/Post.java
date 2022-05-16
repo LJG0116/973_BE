@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -30,7 +29,7 @@ public class Post {
 
     private String content;
 
-    private String author;
+    private String nickname;
 
     private int viewCount;
 
@@ -47,7 +46,7 @@ public class Post {
     }
 
     public void updatePost(UpdatePostRequestDto requestDto) {
-        this.author=requestDto.getAuthor();
+        this.nickname =requestDto.getNickname();
         this.category= requestDto.getCategory();
         this.area= requestDto.getArea();
         this.postDate=LocalDateTime.now().withNano(0);

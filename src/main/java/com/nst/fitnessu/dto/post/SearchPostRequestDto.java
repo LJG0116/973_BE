@@ -9,4 +9,5 @@ public class SearchPostRequestDto {
     String area;
     String category;
     String keyword;
+    String type;
 }

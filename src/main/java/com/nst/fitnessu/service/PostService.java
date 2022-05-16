@@ -1,6 +1,5 @@
 package com.nst.fitnessu.service;
 
-import com.nst.fitnessu.config.JwtTokenProvider;
 import com.nst.fitnessu.domain.*;
 import com.nst.fitnessu.dto.post.*;
 import com.nst.fitnessu.repository.*;
@@ -26,14 +25,14 @@ public class PostService {
     @Transactional
     public CreatePostResponseDto createPost(CreatePostRequestDto requestDto,Type type) {
 
-        User user = userRepository.findByNickname(requestDto.getAuthor())
+        User user = userRepository.findByNickname(requestDto.getNickname())
                 .orElseThrow(()->new IllegalArgumentException("해당 닉네임을 가진 유저가 존재하지 않습니다."));
 
         Post post = Post.builder()
                 .area(requestDto.getArea())
                 .category(requestDto.getCategory())
                 .title(requestDto.getTitle())
-                .author(requestDto.getAuthor())
+                .nickname(requestDto.getNickname())
                 .postDate(LocalDateTime.now().withNano(0))
                 .viewCount(0)
                 .type(type)
@@ -71,9 +70,12 @@ public class PostService {
         Post post = postRepository.findById(Long.parseLong(requestDto.getPostId()))
                 .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
 
+        User user=userRepository.findById(requestDto.getUserId())
+            .orElseThrow(()->new IllegalArgumentException("해당 id의 user가 없습니다"));
+
         post.updatePost(requestDto);
 
-        UpdatePostResponseDto responseDto = new UpdatePostResponseDto(post);
+        UpdatePostResponseDto responseDto = new UpdatePostResponseDto(post,user);
         return responseDto;
     }
 

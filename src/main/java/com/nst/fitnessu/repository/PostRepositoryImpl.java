@@ -1,6 +1,7 @@
 package com.nst.fitnessu.repository;
 
 import com.nst.fitnessu.domain.Post;
+import com.nst.fitnessu.domain.Type;
 import com.nst.fitnessu.dto.post.PostListResponseDto;
 import com.nst.fitnessu.dto.post.SearchPostRequestDto;
 import com.querydsl.core.BooleanBuilder;
@@ -36,11 +37,11 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
     @Override
     public List<PostListResponseDto> findAllByCondition(SearchPostRequestDto requestDto, Pageable pageable) {
         return getQuerydsl().applyPagination(pageable,queryFactory.select(Projections.constructor(PostListResponseDto.class,
-                post.id, post.title,post.author,post.content,post.postDate))
+                post.id, post.title, post.nickname,post.area,post.category,post.content,post.type,post.postDate))
                 .from(post)
                 .join(post.user)
                 .where(createPredicate(requestDto))
-                .orderBy(post.id.desc())
+                .orderBy(post.postDate.desc())
         ).fetch();
     }
 
@@ -49,7 +50,8 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
                 .and(orConditionsByContainCategory(requestDto.getCategory()))
                 .and(orConditionsByContainArea(requestDto.getArea()))
                 .and(containContent(requestDto.getKeyword()))
-                .and(containTitle(requestDto.getKeyword()));
+                .and(containTitle(requestDto.getKeyword()))
+                .and(eqType(requestDto.getType()));
     }
 
     private Predicate orConditionsByContainCategory(String request) { // 9
@@ -87,5 +89,16 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
             return null;
         }
         return post.content.contains(request);
+    }
+
+    private Predicate eqType(String request) {
+        if (StringUtils.isNullOrEmpty(request)) {
+            return null;
+        }
+        if(request.equals(Type.coach.toString()))
+            return post.type.eq(Type.coach);
+        if(request.equals(Type.player.toString()))
+            return post.type.eq(Type.player);
+        else return null;
     }
 }

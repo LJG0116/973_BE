@@ -28,8 +28,9 @@ public class SearchController {
     public ResponseEntity<ResultResponse> searchPostList(@RequestParam(required = false) @ApiParam String area,
                                                          @RequestParam(required = false) @ApiParam String category,
                                                          @RequestParam(required = false) @ApiParam String keyword,
+                                                         @RequestParam(required = false) @ApiParam String type,
                                                          @PathVariable @ApiParam int page) {
-        SearchPostRequestDto requestDto = new SearchPostRequestDto(area, category, keyword);
+        SearchPostRequestDto requestDto = new SearchPostRequestDto(area, category, keyword,type);
         List<PostListResponseDto> pageList=searchService.searchPost(requestDto,page,10);
         ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("게시글 검색",pageList);

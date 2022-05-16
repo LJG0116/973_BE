@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Builder
@@ -18,8 +17,9 @@ public class ViewPostResponseDto {
     String[] area;
     String[] category;
     String text;
-    String author;
+    String nickname;
     String type;
+    Long userId;
     LocalDateTime date;
 
     public ViewPostResponseDto(Post post) {
@@ -27,7 +27,8 @@ public class ViewPostResponseDto {
         this.area = post.getArea().split("#");
         this.category = post.getCategory().split("#");
         this.text = post.getContent();
-        this.author = post.getAuthor();
+        this.nickname = post.getUser().getNickname();
+        this.userId=post.getUser().getId();
         this.date = post.getPostDate();
         this.type = post.getType().toString();
     }
