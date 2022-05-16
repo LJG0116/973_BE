@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public void validateDuplicateNickname(String nickname) {
-        userRepository.findByEmail(nickname)
+        userRepository.findByNickname(nickname)
                 .ifPresent(m->{
                     throw new IllegalArgumentException("이미 존재하는 회원입니다.");
                 });
