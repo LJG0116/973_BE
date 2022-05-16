@@ -32,6 +32,8 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    private String intro;
+
     private Boolean enabled;
 
     //private String refreshToken;

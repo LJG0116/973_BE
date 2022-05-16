@@ -5,7 +5,6 @@ import com.nst.fitnessu.dto.*;
 import com.nst.fitnessu.dto.user.JoinRequestDto;
 import com.nst.fitnessu.dto.user.LoginRequestDto;
 import com.nst.fitnessu.dto.user.LoginResponseDto;
-import com.nst.fitnessu.service.LoginService;
 import com.nst.fitnessu.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,7 +23,6 @@ import java.util.Collections;
 public class UserController {
 
     private final UserService userService;
-    private final LoginService loginService;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/join")
@@ -63,7 +61,7 @@ public class UserController {
     @ApiOperation(value = "로그인 기능")
     public ResponseEntity<ResultResponse> login(@RequestBody @ApiParam(value="이메일 비밀번호가 필요함", required = true)
                                                         LoginRequestDto requestDto) {
-        LoginResponseDto loginResponseDto = loginService.login(requestDto.getEmail(), requestDto.getPassword());
+        LoginResponseDto loginResponseDto = userService.login(requestDto.getEmail(), requestDto.getPassword());
         ResultResponse<LoginResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("로그인 성공",loginResponseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
