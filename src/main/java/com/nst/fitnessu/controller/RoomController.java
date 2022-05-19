@@ -13,10 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +32,19 @@ public class RoomController {
     @GetMapping("/chat/rooms")
     public ResponseEntity<ResultResponse> getUserChatRoom(Long userId){
         List<ChatRoomJoinDto> chatRooms=chatService.findByUserId(userId);
-        ResultResponse<List<ChatRoomJoinDto>> resultResponse=new ResultResponse<>();
-        resultResponse.successResponse("채팅방 목록 불러오기 성공",chatRooms);
+        User user=userService.findById(userId)
+                .orElseThrow(()->new IllegalArgumentException("없는 사용자 입니다."));
+        ResultResponse<List<ChatRoomJoinResponseDto>> resultResponse=new ResultResponse<>();
+        List<ChatRoomJoinResponseDto> chatRoomJoinResponseDtos=new ArrayList<>();
+        for(ChatRoomJoinDto chatRoomJoinDto: chatRooms){
+            chatRoomJoinResponseDtos.add(new ChatRoomJoinResponseDto(user.getId(),
+                    user.getNickname(),
+                    chatRoomJoinDto.getChatRoomId().longValue(),
+                    chatRoomJoinDto.getUserId().longValue(),
+                    chatRoomJoinDto.getNickname()
+            ));
+        }
+        resultResponse.successResponse("채팅방 목록 불러오기 성공",chatRoomJoinResponseDtos);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
@@ -50,7 +64,7 @@ public class RoomController {
                             ,msg.getContent())
             );
         }
-        ChatRoomDto chatRoomDto=new ChatRoomDto(roomSelectDto.getRoomId(), chatRoomMessageDtoList);
+        ChatRoomDto chatRoomDto=new ChatRoomDto(roomSelectDto.getRoomId(),user.getId(),user.getNickname(), chatRoomMessageDtoList);
         ResultResponse<ChatRoomDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("채팅방 불러오기 성공",chatRoomDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
@@ -58,7 +72,7 @@ public class RoomController {
     
     /*
     //sockejs 테스트
-    @GetMapping("/chat/room")
+    @GetMapping("/chat/test")
     public ModelAndView getRoomById(Long id){
         //return chatService.findById(id);
         ChatRoom chatRoom=chatService.findById(id);
@@ -78,6 +92,8 @@ public class RoomController {
         List<ChatRoomJoinDto> sendChatRoom=chatService.findByUserId(roomEnterDTO.getUserId());
         List<BigInteger> senderRoomIdList=new ArrayList<>();
         List<BigInteger> receiverRoomIdList=new ArrayList<>();
+        User sender=userService.findById(roomEnterDTO.getUserId()).
+                orElseThrow(()-> new IllegalArgumentException("없는 유저ID입니다."));
         User receiver=postService.findPostInChat(roomEnterDTO);
         List<ChatRoomJoinDto> receiverChatRoom=chatService.findByUserId(receiver.getId());
         List<ChatRoomMessageDto> messageDtoList=new ArrayList<>();
@@ -106,7 +122,7 @@ public class RoomController {
                         ,message.getContent()));
             }
         }
-        ChatRoomDto chatRoomDto=new ChatRoomDto(roomId,messageDtoList);
+        ChatRoomDto chatRoomDto=new ChatRoomDto(roomId, sender.getId(), sender.getNickname(), messageDtoList);
         resultResponse.successResponse("채팅방 불러오기 성공",chatRoomDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }

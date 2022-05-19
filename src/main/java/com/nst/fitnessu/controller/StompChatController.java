@@ -36,12 +36,10 @@ public class StompChatController {
     public void sendMessage(MessageDto messageDto){
         User user=userService.findById(messageDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("없는 ID 입니다."));
-        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(user.getId(),user.getNickname(), messageDto.getRoomId(), LocalDateTime.now(),messageDto.getContent());
+        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(user.getId(),user.getNickname(), messageDto.getRoomId(), LocalDateTime.now().withNano(0),messageDto.getContent());
         System.out.println("sendMessage : " + chatRoomMessageDto.getContent());
-        //test
-       // messageDto.setContent("adsfadsf");
         Message message=new Message( chatRoomMessageDto.getContent()
-                ,LocalDateTime.now()
+                ,chatRoomMessageDto.getMessageTime()
                 ,chatService.findById(chatRoomMessageDto.getRoomId())
                 ,userService.findById(chatRoomMessageDto.getRoomId())
                 .orElseThrow(()-> new IllegalArgumentException("없는 Id입니다.")));
