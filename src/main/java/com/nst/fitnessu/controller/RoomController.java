@@ -7,6 +7,7 @@ import com.nst.fitnessu.dto.ResultResponse;
 import com.nst.fitnessu.service.ChatService;
 import com.nst.fitnessu.service.PostService;
 import com.nst.fitnessu.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class RoomController {
     private final UserService userService;
 
     @GetMapping("/chat/rooms")
+    @ApiOperation(value = "채팅방 목록 조회")
     public ResponseEntity<ResultResponse> getUserChatRoom(Long userId){
         List<ChatRoomJoinDto> chatRooms=chatService.findByUserId(userId);
         User user=userService.findById(userId)
@@ -46,6 +48,7 @@ public class RoomController {
 
 
     @GetMapping("/chat/room")
+    @ApiOperation(value = "채팅 목록에서 채팅방 선택")
     public ResponseEntity<ResultResponse> getRoomById(RoomSelectDto roomSelectDto){
         User user=userService.findById(roomSelectDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("없는 Id 입니다."));
@@ -82,6 +85,7 @@ public class RoomController {
 
     @Transactional
     @GetMapping("/chat/enter")
+    @ApiOperation(value = "게시글에서 채팅방 불러올 때")
     public ResponseEntity<ResultResponse> getRoomBySenderIdAndPostId(RoomEnterRequestDto roomEnterDTO){
         Long roomId;
         //사용자 정보를 받아오는 과정
