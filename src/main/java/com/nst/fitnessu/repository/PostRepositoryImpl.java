@@ -49,8 +49,7 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
         return new BooleanBuilder()
                 .and(orConditionsByContainCategory(requestDto.getCategory()))
                 .and(orConditionsByContainArea(requestDto.getArea()))
-                .and(containContent(requestDto.getKeyword()))
-                .and(containTitle(requestDto.getKeyword()))
+                .and(orConditionsByContainKeyWord(requestDto.getKeyword()))
                 .and(eqType(requestDto.getType()));
     }
 
@@ -70,25 +69,18 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
         return orConditions(area, post.area::contains);
     }
 
+    private Predicate orConditionsByContainKeyWord(String request) { // 9
+        if (StringUtils.isNullOrEmpty(request)) {
+            return null;
+        }
+       return post.title.contains(request).or(post.content.contains(request));
+    }
+
     private <T> Predicate orConditions(List<T> values, Function<T, BooleanExpression> term) { // 11
         return values.stream()
                 .map(term)
                 .reduce(BooleanExpression::or)
                 .orElse(null);
-    }
-
-    private Predicate containTitle(String request) {
-        if (StringUtils.isNullOrEmpty(request)) {
-            return null;
-        }
-        return post.title.contains(request);
-    }
-
-    private Predicate containContent(String request) {
-        if (StringUtils.isNullOrEmpty(request)) {
-            return null;
-        }
-        return post.content.contains(request);
     }
 
     private Predicate eqType(String request) {
