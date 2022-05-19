@@ -1,5 +1,6 @@
 package com.nst.fitnessu.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,9 +38,15 @@ public class User implements UserDetails {
     private Boolean enabled;
 
     //private String refreshToken;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
+    private List<ChatRoomJoin> chatRoomJoins;
 
+
+    //@JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
+
 
 //    //refreshToken 갱신
 //    public void setRefreshToken(String refreshToken) {
