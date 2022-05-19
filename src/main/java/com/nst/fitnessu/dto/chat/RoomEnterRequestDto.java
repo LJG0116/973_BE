@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class RoomEnterRequestDto {
-    private Long userId;
+    private Long senderId;
     //private Long receiverId;
-    private Long postId;
+    private Long receiverId;
 }

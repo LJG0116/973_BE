@@ -13,13 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +24,6 @@ public class RoomController {
 
     private final ChatService chatService;
     private final UserService userService;
-    private final PostService postService;
 
     @GetMapping("/chat/rooms")
     public ResponseEntity<ResultResponse> getUserChatRoom(Long userId){
@@ -89,12 +85,13 @@ public class RoomController {
     public ResponseEntity<ResultResponse> getRoomBySenderIdAndPostId(RoomEnterRequestDto roomEnterDTO){
         Long roomId;
         //사용자 정보를 받아오는 과정
-        List<ChatRoomJoinDto> sendChatRoom=chatService.findByUserId(roomEnterDTO.getUserId());
+        List<ChatRoomJoinDto> sendChatRoom=chatService.findByUserId(roomEnterDTO.getSenderId());
         List<BigInteger> senderRoomIdList=new ArrayList<>();
         List<BigInteger> receiverRoomIdList=new ArrayList<>();
-        User sender=userService.findById(roomEnterDTO.getUserId()).
+        User sender=userService.findById(roomEnterDTO.getSenderId()).
                 orElseThrow(()-> new IllegalArgumentException("없는 유저ID입니다."));
-        User receiver=postService.findPostInChat(roomEnterDTO);
+        User receiver=userService.findById(roomEnterDTO.getReceiverId()).
+                orElseThrow(()-> new IllegalArgumentException("없는 유저ID입니다."));
         List<ChatRoomJoinDto> receiverChatRoom=chatService.findByUserId(receiver.getId());
         List<ChatRoomMessageDto> messageDtoList=new ArrayList<>();
         ChatRoom chatRoom;
@@ -109,7 +106,7 @@ public class RoomController {
         senderRoomIdList.retainAll(receiverRoomIdList);
         ResultResponse<ChatRoomDto> resultResponse=new ResultResponse<>();
         if(senderRoomIdList.size()==0){
-            chatRoom=chatService.createRoom(roomEnterDTO.getUserId(), receiver.getId());
+            chatRoom=chatService.createRoom(roomEnterDTO.getSenderId(), receiver.getId());
             roomId= chatRoom.getId();
         }else{
             roomId= senderRoomIdList.get(0).longValue();
