@@ -1,6 +1,7 @@
 package com.nst.fitnessu.controller;
 
 import com.nst.fitnessu.domain.Message;
+import com.nst.fitnessu.domain.User;
 import com.nst.fitnessu.dto.chat.ChatRoomMessageDto;
 import com.nst.fitnessu.dto.chat.MessageDto;
 import com.nst.fitnessu.service.ChatService;
@@ -33,7 +34,9 @@ public class StompChatController {
     @Transactional
     @MessageMapping(value = "/chat/message")
     public void sendMessage(MessageDto messageDto){
-        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(messageDto.getUserId(), messageDto.getRoomId(), LocalDateTime.now(),messageDto.getContent());
+        User user=userService.findById(messageDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("없는 ID 입니다."));
+        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(user.getId(),user.getNickname(), messageDto.getRoomId(), LocalDateTime.now(),messageDto.getContent());
         System.out.println("sendMessage : " + chatRoomMessageDto.getContent());
         //test
        // messageDto.setContent("adsfadsf");

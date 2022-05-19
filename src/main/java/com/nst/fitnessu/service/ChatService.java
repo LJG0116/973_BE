@@ -10,9 +10,13 @@ import com.nst.fitnessu.repository.ChatRoomJoinRepository;
 import com.nst.fitnessu.repository.ChatRoomRepository;
 import com.nst.fitnessu.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,25 +32,26 @@ public class ChatService {
     private final MessageRepository messageRepository;
     private final UserService userService;
 
-
-
+    @PersistenceContext
+    EntityManager em;
 
     public List<ChatRoomJoinDto> findByUserId(Long userId){
-        List<ChatRoomJoin> chatRoomJoinList=chatRoomJoinRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 User는 chatRoom을가지고 있지 않습니다."));
-        List<ChatRoomJoinDto> chatRoomJoinDtoList=new ArrayList<>();
-        for(ChatRoomJoin cj: chatRoomJoinList){
-            chatRoomJoinDtoList.add(new ChatRoomJoinDto(cj.getId(),cj.getUser(),cj.getChatRoom().getId()));
-        }
-        return chatRoomJoinDtoList;
+        String queryString="select chat_room_id,user_id,nickname from "
+                + "user natural join chat_room_join "
+                +"WHERE chat_room_id in (select T.chat_room_id from chat_room_join as T WHERE user_id="+userId+")"
+                +" AND user_id !="+userId;
+        JpaResultMapper resultMapper=new JpaResultMapper();
+        Query query=em.createNativeQuery(queryString);
+        List<ChatRoomJoinDto> chatRoomList=resultMapper.list(query,ChatRoomJoinDto.class);
+        return chatRoomList;
     }
 
     @Transactional
     public ChatRoom createRoom(Long senderId,Long receiverId){
         User sender=userService.findById(senderId)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Id 입니다."));
         User receiver=userService.findById(receiverId)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Id 입니다."));
         ChatRoom chatRoom=new ChatRoom();
         ChatRoomJoin chatRoomJoinSender=new ChatRoomJoin(sender,chatRoom);
         ChatRoomJoin chatRoomJoinReceiver=new ChatRoomJoin(receiver,chatRoom);
@@ -72,7 +77,10 @@ public class ChatService {
 
 
      */
-
+    public List<Message> getMessages(Long chatRoomId){
+        return messageRepository.findByChatRoomIdOrderByMessageTimeDesc(chatRoomId)
+                .orElseThrow(()-> new IllegalArgumentException("없는 채팅방 입니다."));
+    }
 
 
     public ChatRoom findById(Long id){ return chatRoomRepository.findById(id)
