@@ -64,11 +64,7 @@ public class PostService {
         return responseDto;
     }
 
-    public User findPostInChat(RoomEnterRequestDto requestDto){
-        Post post = postRepository.findById((requestDto.getPostId()))
-                .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
-        return post.getUser();
-    }
+
 
     @Transactional
     public UpdatePostResponseDto updatePost(UpdatePostRequestDto requestDto) {
