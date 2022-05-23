@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 @Service
@@ -78,7 +76,7 @@ public class ChatService {
 
      */
     public List<Message> getMessages(Long chatRoomId){
-        return messageRepository.findByChatRoomIdOrderByMessageTimeDesc(chatRoomId)
+        return messageRepository.findByChatRoomIdOrderByMessageTime(chatRoomId)
                 .orElseThrow(()-> new IllegalArgumentException("없는 채팅방 입니다."));
     }
 

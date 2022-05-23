@@ -83,7 +83,6 @@ public class RoomController {
     }
     */
 
-    @Transactional
     @GetMapping("/chat/enter")
     @ApiOperation(value = "게시글에서 채팅방 불러올 때")
     public ResponseEntity<ResultResponse> getRoomBySenderIdAndPostId(RoomEnterRequestDto roomEnterDTO){
