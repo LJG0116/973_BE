@@ -76,7 +76,7 @@ public class ChatService {
 
      */
     public List<Message> getMessages(Long chatRoomId){
-        return messageRepository.findByChatRoomIdOrderByMessageTime(chatRoomId)
+        return messageRepository.findByChatRoomIdOrderByMessageTimeAsc(chatRoomId)
                 .orElseThrow(()-> new IllegalArgumentException("없는 채팅방 입니다."));
     }
 

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    public Optional<List<Message>> findByChatRoomIdOrderByMessageTime(Long chatRoomId);
+    public Optional<List<Message>> findByChatRoomIdOrderByMessageTimeAsc(Long chatRoomId);
 }
