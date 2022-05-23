@@ -1,5 +1,6 @@
 package com.nst.fitnessu.domain;
 
+import com.nst.fitnessu.dto.myPage.UpdateMyInfoRequestDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,6 +35,8 @@ public class User implements UserDetails {
 
     private String intro;
 
+    private String profileImage;
+
     private Boolean enabled;
 
     //private String refreshToken;
@@ -46,7 +49,12 @@ public class User implements UserDetails {
 //        this.refreshToken=refreshToken;
 //    }
 
-
+    public void updateUser(UpdateMyInfoRequestDto requestDto){
+        this.email= requestDto.getEmail();
+        this.nickname= requestDto.getNickname();
+        this.intro= requestDto.getIntro();
+        this.profileImage= requestDto.getProfileImage();
+    }
     //-----------------------인증관련--------------------------------
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
