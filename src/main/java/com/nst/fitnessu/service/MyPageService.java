@@ -2,6 +2,8 @@ package com.nst.fitnessu.service;
 
 import com.nst.fitnessu.domain.Post;
 import com.nst.fitnessu.domain.User;
+import com.nst.fitnessu.dto.myPage.UpdateMyInfoRequestDto;
+import com.nst.fitnessu.dto.myPage.ViewMyInfoResponseDto;
 import com.nst.fitnessu.dto.post.PostListResponseDto;
 import com.nst.fitnessu.dto.myPage.MyPostRequestDto;
 import com.nst.fitnessu.repository.PostRepository;
@@ -23,6 +25,7 @@ public class MyPageService {
 
     private final UserRepository userRepository;//
     private final PostRepository postRepository;
+    private final AwsS3Service awsS3Service;
 
     public List<PostListResponseDto> viewMyPost(MyPostRequestDto requestDto, Integer pageNum,Integer postsPerPage) {
         User user = userRepository.findById(requestDto.getUserId())
@@ -33,8 +36,25 @@ public class MyPageService {
                 PageRequest.of(pageNum - 1, postsPerPage,
                         Sort.by(Sort.Direction.DESC, "postDate")
                 ));
+
         return page.stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public ViewMyInfoResponseDto viewMyInfo(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id의 유저를 찾을 수 없습니다."));
+
+        return new ViewMyInfoResponseDto(user);
+    }
+
+    @Transactional
+    public ViewMyInfoResponseDto updateMyInfo(UpdateMyInfoRequestDto requestDto) {
+        User user = userRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 id의 유저를 찾을 수 없습니다."));
+
+        user.updateUser(requestDto);
+        return new ViewMyInfoResponseDto(user);
     }
 }
