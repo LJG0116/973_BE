@@ -41,7 +41,7 @@ public class StompChatController {
         Message message=new Message( chatRoomMessageDto.getContent()
                 ,chatRoomMessageDto.getMessageTime()
                 ,chatService.findById(chatRoomMessageDto.getRoomId())
-                ,userService.findById(chatRoomMessageDto.getRoomId())
+                ,userService.findById(chatRoomMessageDto.getUserId())
                 .orElseThrow(()-> new IllegalArgumentException("없는 Id입니다.")));
         chatService.saveMessage(message);
         simpMessageSendingOperation.convertAndSend("/sub/chat/room/"+chatRoomMessageDto.getRoomId(),chatRoomMessageDto);
