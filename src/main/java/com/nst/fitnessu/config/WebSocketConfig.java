@@ -1,6 +1,9 @@
 package com.nst.fitnessu.config;
 
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -30,5 +33,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         taskScheduler.initialize();
         return taskScheduler;
     }
-
 }
