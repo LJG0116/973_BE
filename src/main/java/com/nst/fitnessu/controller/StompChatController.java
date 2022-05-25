@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,12 +37,12 @@ public class StompChatController {
     public void sendMessage(MessageDto messageDto){
         User user=userService.findById(messageDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("없는 ID 입니다."));
-        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(user.getId(),user.getNickname(), messageDto.getRoomId(), LocalDateTime.now().withNano(0),messageDto.getContent());
+        ChatRoomMessageDto chatRoomMessageDto=new ChatRoomMessageDto(user.getId(),user.getNickname(), messageDto.getRoomId(), LocalDateTime.now(ZoneId.of("Asia/Seoul")).withNano(0),messageDto.getContent());
         System.out.println("sendMessage : " + chatRoomMessageDto.getContent());
         Message message=new Message( chatRoomMessageDto.getContent()
                 ,chatRoomMessageDto.getMessageTime()
                 ,chatService.findById(chatRoomMessageDto.getRoomId())
-                ,userService.findById(chatRoomMessageDto.getRoomId())
+                ,userService.findById(chatRoomMessageDto.getUserId())
                 .orElseThrow(()-> new IllegalArgumentException("없는 Id입니다.")));
         chatService.saveMessage(message);
         simpMessageSendingOperation.convertAndSend("/sub/chat/room/"+chatRoomMessageDto.getRoomId(),chatRoomMessageDto);
