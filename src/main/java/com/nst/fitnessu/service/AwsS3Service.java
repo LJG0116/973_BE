@@ -32,8 +32,14 @@ public class AwsS3Service {
     @Transactional
     public String uploadImage(Long id, MultipartFile multipartFile) {
 
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException());
+
+        if(multipartFile.isEmpty())
+            return user.getProfileImage();
+
         //s3에서 기존 파일 삭제
-        deleteImage(id);
+        deleteImage(user,id);
 
         validateFileExists(multipartFile);
 
@@ -52,9 +58,7 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    private void deleteImage(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException());
+    private void deleteImage(User user,Long id) {
 
         String imageUrl=user.getProfileImage();
 

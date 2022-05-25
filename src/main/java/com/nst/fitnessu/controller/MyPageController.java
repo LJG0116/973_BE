@@ -57,7 +57,6 @@ public class MyPageController {
                                                        @RequestParam @ApiParam String intro,
                                                        @RequestParam @ApiParam String nickname,
                                                        @RequestPart @ApiParam MultipartFile profileImage) {
-        //임시
         String imageUrl=awsS3Service.uploadImage(id,profileImage);
         UpdateMyInfoRequestDto requestDto = new UpdateMyInfoRequestDto(id, email, nickname, intro, imageUrl);
         ViewMyInfoResponseDto responseDto = myPageService.updateMyInfo(requestDto);
