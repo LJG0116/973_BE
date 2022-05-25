@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,12 +27,13 @@ import java.util.List;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final AwsS3Service awsS3Service;
 
     @GetMapping("/post")
     @ApiOperation(value = "내 게시글 목록")
     public ResponseEntity<ResultResponse> viewPostList(@RequestParam @ApiParam Integer page,
-                                                            @RequestParam @ApiParam Long id) {
-        MyPostRequestDto requestDto = new MyPostRequestDto(id);
+                                                            @RequestParam @ApiParam Long userId) {
+        MyPostRequestDto requestDto = new MyPostRequestDto(userId);
         List<PostListResponseDto> pageList=myPageService.viewMyPost(requestDto,page,5);
         ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("나의 글목록 조회",pageList);
@@ -40,9 +42,9 @@ public class MyPageController {
 
     @GetMapping("/info/{id}")
     @ApiOperation(value = "내 정보 조회")
-    public ResponseEntity<ResultResponse> viewMyInfo(@PathVariable @ApiParam Long id) {
+    public ResponseEntity<ResultResponse> viewMyInfo(@PathVariable @ApiParam Long userId) {
         //임시
-        ViewMyInfoResponseDto responseDto = myPageService.viewMyInfo(id);
+        ViewMyInfoResponseDto responseDto = myPageService.viewMyInfo(userId);
         ResultResponse<ViewMyInfoResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("내 정보 조회",responseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
@@ -50,8 +52,14 @@ public class MyPageController {
 
     @PutMapping("/info")
     @ApiOperation(value = "내 정보 수정")
-    public ResponseEntity<ResultResponse> updateMyInfo(@RequestBody @ApiParam UpdateMyInfoRequestDto requestDto) {
+    public ResponseEntity<ResultResponse> updateMyInfo(@RequestParam @ApiParam Long id,
+                                                       @RequestParam @ApiParam String email,
+                                                       @RequestParam @ApiParam String intro,
+                                                       @RequestParam @ApiParam String nickname,
+                                                       @RequestPart @ApiParam MultipartFile profileImage) {
         //임시
+        String imageUrl=awsS3Service.uploadImage(id,profileImage);
+        UpdateMyInfoRequestDto requestDto = new UpdateMyInfoRequestDto(id, email, nickname, intro, imageUrl);
         ViewMyInfoResponseDto responseDto = myPageService.updateMyInfo(requestDto);
         ResultResponse<ViewMyInfoResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("내 정보 수정",responseDto);

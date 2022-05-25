@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.nst.fitnessu.domain.User;
+import com.nst.fitnessu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,15 +24,16 @@ import java.util.UUID;
 public class AwsS3Service {
 
     private final AmazonS3Client amazonS3Client;
+    private final UserRepository userRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
     @Transactional
-    public String uploadImage(String imageUrl, MultipartFile multipartFile) {
+    public String uploadImage(Long id, MultipartFile multipartFile) {
 
         //s3에서 기존 파일 삭제
-        deleteImage(imageUrl);
+        deleteImage(id);
 
         validateFileExists(multipartFile);
 
@@ -49,7 +52,12 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    private void deleteImage(String imageUrl) {
+    private void deleteImage(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException());
+
+        String imageUrl=user.getProfileImage();
+
         if(imageUrl !=null){
             boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, imageUrl);
 
