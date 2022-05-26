@@ -40,7 +40,7 @@ public class MyPageController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/info/{id}")
+    @GetMapping("/info/{userId}")
     @ApiOperation(value = "내 정보 조회")
     public ResponseEntity<ResultResponse> viewMyInfo(@PathVariable @ApiParam Long userId) {
         //임시
