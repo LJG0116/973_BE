@@ -62,7 +62,7 @@ public class PostController {
     @GetMapping("/coach/{page}")
     @ApiOperation(value = "코치 게시글 목록")
     public ResponseEntity<ResultResponse> viewCoachPostList(@PathVariable @ApiParam Integer page) {
-        List<PostListResponseDto> pageList=postService.viewList(Type.coach,page,10);
+        List<PostListResponseDto> pageList=postService.viewList(Type.coach,page,7);
         ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("코치 글목록 조회",pageList);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class PostController {
     @GetMapping("/player/{page}")
     @ApiOperation(value = "플레이어 게시글 목록")
     public ResponseEntity<ResultResponse> viewPlayerPostList(@PathVariable @ApiParam Integer page) {
-        List<PostListResponseDto> pageList=postService.viewList(Type.player,page,10);
+        List<PostListResponseDto> pageList=postService.viewList(Type.player,page,7);
         ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("플레이어 글목록 조회",pageList);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);

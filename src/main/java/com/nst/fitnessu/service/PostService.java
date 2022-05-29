@@ -58,9 +58,14 @@ public class PostService {
     }
 
     public ViewPostResponseDto findPost(ViewPostRequestDto requestDto) {
+
         Post post = postRepository.findById((requestDto.getPostId()))
                 .orElseThrow(()->new IllegalArgumentException("해당 id의 post가 없습니다"));
-        ViewPostResponseDto responseDto = new ViewPostResponseDto(post);
+
+        User user = userRepository.findById(post.getUser().getId())
+                .orElseThrow(()->new IllegalArgumentException("해당 id의 유저를 찾을 수 없습니다."));
+
+        ViewPostResponseDto responseDto = new ViewPostResponseDto(post,user.getProfileImage());
         return responseDto;
     }
 

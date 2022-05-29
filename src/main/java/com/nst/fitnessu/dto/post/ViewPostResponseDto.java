@@ -19,10 +19,11 @@ public class ViewPostResponseDto {
     String text;
     String nickname;
     String type;
+    String profileImage;
     Long userId;
     LocalDateTime date;
 
-    public ViewPostResponseDto(Post post) {
+    public ViewPostResponseDto(Post post, String profileImage) {
         this.title = post.getTitle();
         this.area = post.getArea().split("#");
         this.category = post.getCategory().split("#");
@@ -31,5 +32,6 @@ public class ViewPostResponseDto {
         this.userId=post.getUser().getId();
         this.date = post.getPostDate();
         this.type = post.getType().toString();
+        this.profileImage = profileImage;
     }
 }
