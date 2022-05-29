@@ -54,7 +54,7 @@ public class MyPageController {
     @ApiOperation(value = "내 정보 수정")
     public ResponseEntity<ResultResponse> updateMyInfo(@RequestParam @ApiParam Long id,
                                                        @RequestParam @ApiParam String email,
-                                                       @RequestParam @ApiParam String intro,
+                                                       @RequestParam(required = false) @ApiParam String intro,
                                                        @RequestParam @ApiParam String nickname,
                                                        @RequestPart(required = false) @ApiParam MultipartFile profileImage) {
         String imageUrl=awsS3Service.uploadImage(id,profileImage);
