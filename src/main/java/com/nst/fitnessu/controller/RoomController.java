@@ -25,10 +25,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class RoomController {
-
     private final ChatService chatService;
     private final UserService userService;
-
     @GetMapping("/chat/rooms")
     @ApiOperation(value = "채팅방 목록 조회")
     public ResponseEntity<ResultResponse> getUserChatRoom(Long userId){
@@ -38,12 +36,14 @@ public class RoomController {
         ResultResponse<List<ChatRoomJoinResponseDto>> resultResponse=new ResultResponse<>();
         List<ChatRoomJoinResponseDto> chatRoomJoinResponseDtos=new ArrayList<>();
         for(ChatRoomJoinDto chatRoomJoinDto: chatRooms){
+            User receiver=userService.findById(chatRoomJoinDto.getUserId().longValue())
+                    .orElseThrow(()->new IllegalArgumentException("없는 사용자 입니다."));
             chatRoomJoinResponseDtos.add(new ChatRoomJoinResponseDto(user.getId(),
                     user.getNickname(),
                     chatRoomJoinDto.getChatRoomId().longValue(),
                     chatRoomJoinDto.getUserId().longValue(),
                     chatRoomJoinDto.getNickname(),
-                    user.getProfileImage()
+                    receiver.getProfileImage()
             ));
         }
         resultResponse.successResponse("채팅방 목록 불러오기 성공",chatRoomJoinResponseDtos);
