@@ -24,7 +24,7 @@ public class PostController {
     @GetMapping("/player")
     @ApiOperation(value = "플레이어 메인 화면목록")
     public ResponseEntity<ResultResponse> mainPlayerPostList() {
-        List<PostListResponseDto> pageList=postService.viewList(Type.player,1,5);
+        List<PostListResponseDto> pageList=postService.viewList(Type.player,1,6);
         ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("플레이어 메인",pageList);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
@@ -35,7 +35,7 @@ public class PostController {
     @GetMapping("/coach")
     @ApiOperation(value = "코치 메인 화면목록")
     public ResponseEntity<ResultResponse> mainCoachPostList() {
-        List<PostListResponseDto> pageList=postService.viewList(Type.coach,1,5);
+        List<PostListResponseDto> pageList=postService.viewList(Type.coach,1,6);
         ResultResponse<List<PostListResponseDto>> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("코치 메인",pageList);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
