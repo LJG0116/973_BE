@@ -14,10 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,7 +42,8 @@ public class RoomController {
                     user.getNickname(),
                     chatRoomJoinDto.getChatRoomId().longValue(),
                     chatRoomJoinDto.getUserId().longValue(),
-                    chatRoomJoinDto.getNickname()
+                    chatRoomJoinDto.getNickname(),
+                    user.getProfileImage()
             ));
         }
         resultResponse.successResponse("채팅방 목록 불러오기 성공",chatRoomJoinResponseDtos);
@@ -58,6 +62,7 @@ public class RoomController {
             chatRoomMessageDtoList.add(new ChatRoomMessageDto(
                              msg.getUser().getId()
                             ,msg.getUser().getNickname()
+                            ,msg.getUser().getProfileImage()
                             ,roomSelectDto.getRoomId()
                             ,msg.getMessageTime()
                             ,msg.getContent())
@@ -69,7 +74,7 @@ public class RoomController {
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
     
-    /*
+
     //sockejs 테스트
     @GetMapping("/chat/test")
     public ModelAndView getRoomById(Long id){
@@ -81,7 +86,7 @@ public class RoomController {
         map.put("chatRoom",chatRoom);
         return modelAndView;
     }
-    */
+
 
     @GetMapping("/chat/enter")
     @ApiOperation(value = "게시글에서 채팅방 불러올 때")
@@ -117,6 +122,7 @@ public class RoomController {
             for(Message message: messages){
                 messageDtoList.add(new ChatRoomMessageDto(message.getUser().getId()
                         ,message.getUser().getNickname()
+                        ,message.getUser().getProfileImage()
                         ,roomId
                         ,message.getMessageTime()
                         ,message.getContent()));
