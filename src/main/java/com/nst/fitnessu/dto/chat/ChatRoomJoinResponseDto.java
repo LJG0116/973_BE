@@ -11,4 +11,5 @@ public class ChatRoomJoinResponseDto {
     private Long chatRoomId;
     private Long receiverId;
     private String receiverNickname;
+    private String profileImage;
 }
