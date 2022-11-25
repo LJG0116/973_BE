@@ -39,7 +39,7 @@ public class AwsS3Service {
             return user.getProfileImage();
 
         //s3에서 기존 파일 삭제
-        deleteImage(user,id);
+        deleteImage(user.getProfileImage());
 
         validateFileExists(multipartFile);
 
@@ -58,11 +58,9 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    private void deleteImage(User user,Long id) {
+    private void deleteImage(String imageUrl) {
 
-        String imageUrl=user.getProfileImage();
-
-        if(imageUrl !=null){
+        if(imageUrl !=null || imageUrl=="https://974s3.s3.ap-northeast-2.amazonaws.com/user.png"){
             boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, imageUrl);
 
             if (isExistObject == true) {
