@@ -1,14 +1,14 @@
-cloud:
-  aws:
-    credentials:
-      access-key: AKIA4Q54RXVCKQWH2YFX
-      secret-key: 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
-    region:
-      static: ap-northeast-2
-    s3:
-      bucket: 973s3
-    stack:
-      auto: false
+#cloud:
+#  aws:
+#    credentials:
+#      access-key: AKIA4Q54RXVCKQWH2YFX
+#      secret-key: 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
+#    region:
+#      static: ap-northeast-2
+#    s3:
+#      bucket: 973s3
+#    stack:
+#      auto: false
 
 spring:
   mvc:

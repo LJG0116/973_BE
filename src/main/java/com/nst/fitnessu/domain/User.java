@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +39,8 @@ public class User implements UserDetails {
 
     private String profileImage;
 
+    private String roles;
+
     private Boolean enabled;
 
     //private String refreshToken;
@@ -56,6 +59,9 @@ public class User implements UserDetails {
 //        this.refreshToken=refreshToken;
 //    }
 
+    public void setPassword(String password) {
+        this.password=password;
+    }
     public void updateUser(UpdateMyInfoRequestDto requestDto){
         this.email= requestDto.getEmail();
         this.nickname= requestDto.getNickname();
@@ -63,39 +69,12 @@ public class User implements UserDetails {
         this.profileImage= requestDto.getProfileImage();
     }
     //-----------------------인증관련--------------------------------
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+    public List<String> getRoleList() {
+        if (this.roles.length() > 0)
+            return Arrays.asList(this.roles.split(","));
+        return new ArrayList<>();
     }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

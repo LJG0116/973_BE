@@ -1,4 +1,4 @@
-package com.nst.fitnessu.config;
+package com.nst.fitnessu.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

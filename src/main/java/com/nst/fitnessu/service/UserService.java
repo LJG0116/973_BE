@@ -1,8 +1,10 @@
 package com.nst.fitnessu.service;
 
-import com.nst.fitnessu.config.JwtTokenProvider;
+import com.nst.fitnessu.config.jwt.JwtTokenProvider;
 import com.nst.fitnessu.domain.User;
+import com.nst.fitnessu.dto.user.PasswordResponseDto;
 import com.nst.fitnessu.dto.user.LoginResponseDto;
+import com.nst.fitnessu.dto.user.UpdatePasswordRequestDto;
 import com.nst.fitnessu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +31,7 @@ public class UserService {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        return new LoginResponseDto(jwtTokenProvider.createJwtAccessToken(user.getEmail(),user.getRoles())
+        return new LoginResponseDto(jwtTokenProvider.createJwtAccessToken(user.getEmail(),user.getRoleList())
         ,user.getId().toString(),user.getEmail(), user.getNickname());
     }
     //회원가입
@@ -62,14 +64,33 @@ public class UserService {
                 });
     }
 
+    public PasswordResponseDto validateEqualPassword(Long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id의 유저를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
+        return new PasswordResponseDto(1);
+    }
+
+    public PasswordResponseDto updatePassword(UpdatePasswordRequestDto requestDto) {
+        User user = userRepository.findById(requestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 id의 유저를 찾을 수 없습니다."));
+
+        if(!requestDto.getPassword().equals(requestDto.getConfirmPassword()))
+            throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 다릅니다.");
+
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+
+        return new PasswordResponseDto(1);
+    }
+
 
     public List<User> findUsers(){
         return userRepository.findAll();
     }
     public Optional<User> findById(Long id){return userRepository.findById(id); }
-    public Optional<User> findOne(String email) {
-        return userRepository.findByEmail(email);
-    }
-    public Optional<User> findByEmail(String email){return userRepository.findByEmail(email);}
-    public Optional<User> findByNickname(String nickname){return userRepository.findByNickname(nickname);}
+
 }

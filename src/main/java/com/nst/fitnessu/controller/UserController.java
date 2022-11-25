@@ -33,7 +33,7 @@ public class UserController {
                 .email(requestDto.getEmail())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .nickname(requestDto.getNickname())
-                .roles(Collections.singletonList("ROLE_USER"))
+                .roles("ROLE_USER")
                 .build();
 
         userService.join(user);
@@ -66,4 +66,14 @@ public class UserController {
         resultResponse.successResponse("로그인 성공",loginResponseDto);
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
+
+//    @GetMapping("/password")
+//    @ApiOperation(value = "비밀번호 확인")
+//    public ResponseEntity<ResultResponse> checkPassword(@RequestParam @ApiParam String password,
+//                                                        @RequestParam @ApiParam Long id) {
+//        LoginResponseDto loginResponseDto = userService.login(requestDto.getEmail(), requestDto.getPassword());
+//        ResultResponse<LoginResponseDto> resultResponse=new ResultResponse<>();
+//        resultResponse.successResponse("로그인 성공",loginResponseDto);
+//        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+//    }
 }
