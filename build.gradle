@@ -22,7 +22,6 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -50,7 +49,12 @@ dependencies {
 	implementation group: 'org.qlrm', name: 'qlrm', version: '2.0.2'
 	//s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
+	//jwt
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.19.2'
+	compile 'com.rabbitmq:amqp-client:5.9.0'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp:2.6.4'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty:2.6.4'
 }
 
 tasks.named('test') {
@@ -70,6 +74,7 @@ sourceSets {
 compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
 }
+
 
 configurations {
 	compileOnly {

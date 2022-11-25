@@ -13,4 +13,7 @@ public class MessageDto {
     private Long userId;
     private Long roomId;
     private String content;
+
+    public MessageDto() {
+    }
 }

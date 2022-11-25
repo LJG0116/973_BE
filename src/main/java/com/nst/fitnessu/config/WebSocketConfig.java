@@ -17,11 +17,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
+        /*
         config.enableSimpleBroker("/sub").
                 setTaskScheduler(taskScheduler()).
                 setHeartbeatValue(new long[] {3000L, 3000L});
         config.setApplicationDestinationPrefixes("/pub");
+        */
+        config.setApplicationDestinationPrefixes("/pub");
+        config.enableStompBrokerRelay("/queue", "/topic", "/exchange", "/amq/queue")
+                .setRelayHost("fitnessu.link")
+                .setRelayPort(61613)
+                .setClientLogin("admin")
+                .setClientPasscode("0116");
     }
+
     //.addInterceptors(new HttpHandshakeInterceptor())
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {

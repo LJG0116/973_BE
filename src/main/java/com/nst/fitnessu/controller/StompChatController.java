@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+/*
 @RestController
 @RequiredArgsConstructor
 public class StompChatController {
@@ -47,4 +48,8 @@ public class StompChatController {
         chatService.saveMessage(message);
         simpMessageSendingOperation.convertAndSend("/sub/chat/room/"+chatRoomMessageDto.getRoomId(),chatRoomMessageDto);
     }
+
+
 }
+
+ */
