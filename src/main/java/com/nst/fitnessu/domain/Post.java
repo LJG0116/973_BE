@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +41,9 @@ public class Post {
     private String area;
 
     private String category;
+
+    @OneToMany(mappedBy = "post")
+    private List<Image> images = new ArrayList<>();
 
     //연관관계 메서드
     public void setUser(User user) {

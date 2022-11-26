@@ -25,7 +25,7 @@ public class MyPageService {
 
     private final UserRepository userRepository;//
     private final PostRepository postRepository;
-    private final AwsS3Service awsS3Service;
+    private final ImageService imageService;
 
     public List<PostListResponseDto> viewMyPost(MyPostRequestDto requestDto, Integer pageNum,Integer postsPerPage) {
         User user = userRepository.findById(requestDto.getUserId())

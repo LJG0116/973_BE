@@ -1,14 +1,11 @@
 package com.nst.fitnessu.controller;
 
-import com.nst.fitnessu.domain.Type;
 import com.nst.fitnessu.dto.ResultResponse;
 import com.nst.fitnessu.dto.myPage.MyPostRequestDto;
 import com.nst.fitnessu.dto.myPage.UpdateMyInfoRequestDto;
 import com.nst.fitnessu.dto.myPage.ViewMyInfoResponseDto;
 import com.nst.fitnessu.dto.post.PostListResponseDto;
-import com.nst.fitnessu.dto.post.ViewPostRequestDto;
-import com.nst.fitnessu.dto.post.ViewPostResponseDto;
-import com.nst.fitnessu.service.AwsS3Service;
+import com.nst.fitnessu.service.ImageService;
 import com.nst.fitnessu.service.MyPageService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,7 +24,7 @@ import java.util.List;
 public class MyPageController {
 
     private final MyPageService myPageService;
-    private final AwsS3Service awsS3Service;
+    private final ImageService imageService;
 
     @GetMapping("/post")
     @ApiOperation(value = "내 게시글 목록")
@@ -57,7 +54,7 @@ public class MyPageController {
                                                        @RequestParam(required = false) @ApiParam String intro,
                                                        @RequestParam @ApiParam String nickname,
                                                        @RequestPart(required = false) @ApiParam MultipartFile profileImage) {
-        String imageUrl=awsS3Service.uploadImage(id,profileImage);
+        String imageUrl= imageService.uploadUserImage(id,profileImage);
         UpdateMyInfoRequestDto requestDto = new UpdateMyInfoRequestDto(id, email, nickname, intro, imageUrl);
         ViewMyInfoResponseDto responseDto = myPageService.updateMyInfo(requestDto);
         ResultResponse<ViewMyInfoResponseDto> resultResponse=new ResultResponse<>();

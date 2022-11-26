@@ -1,11 +1,13 @@
 package com.nst.fitnessu.dto.post;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class UpdatePostRequestDto {
     String title;
     String area;
@@ -13,5 +15,5 @@ public class UpdatePostRequestDto {
     String text;
     String nickname;
     Long userId;
-    String postId;
+    Long postId;
 }
