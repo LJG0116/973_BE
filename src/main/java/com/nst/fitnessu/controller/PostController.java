@@ -46,13 +46,13 @@ public class PostController {
 
     @PostMapping("/coach")
     @ApiOperation(value = "코치 글쓰기")
-    public ResponseEntity<ResultResponse> createCoachPost(@RequestPart @ApiParam String title,
-                                                          @RequestPart @ApiParam String area,
-                                                          @RequestPart @ApiParam String category,
-                                                          @RequestPart @ApiParam String text,
-                                                          @RequestPart @ApiParam String nickname,
-                                                          @RequestPart @ApiParam Long userId,
-                                                          @RequestPart @ApiParam List<MultipartFile> postImages ) {
+    public ResponseEntity<ResultResponse> createCoachPost(@RequestParam @ApiParam String title,
+                                                          @RequestParam @ApiParam String area,
+                                                          @RequestParam @ApiParam String category,
+                                                          @RequestParam @ApiParam String text,
+                                                          @RequestParam @ApiParam String nickname,
+                                                          @RequestParam @ApiParam Long userId,
+                                                          @RequestPart(required = false) @ApiParam List<MultipartFile> postImages ) {
         CreatePostRequestDto requestDto = new CreatePostRequestDto(title, area, category, text, nickname, userId);
         CreatePostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
         imageService.uploadPostImages(responseDto.getPostId(), postImages);
@@ -63,15 +63,15 @@ public class PostController {
 
     @PostMapping("/player")
     @ApiOperation(value = "플레이어 글쓰기")
-    public ResponseEntity<ResultResponse> createPlayerPost(@RequestPart @ApiParam String title,
-                                                           @RequestPart @ApiParam String area,
-                                                           @RequestPart @ApiParam String category,
-                                                           @RequestPart @ApiParam String text,
-                                                           @RequestPart @ApiParam String nickname,
-                                                           @RequestPart @ApiParam Long userId,
-                                                           @RequestPart @ApiParam List<MultipartFile> postImages) {
+    public ResponseEntity<ResultResponse> createPlayerPost(@RequestParam @ApiParam String title,
+                                                           @RequestParam @ApiParam String area,
+                                                           @RequestParam @ApiParam String category,
+                                                           @RequestParam @ApiParam String text,
+                                                           @RequestParam @ApiParam String nickname,
+                                                           @RequestParam @ApiParam Long userId,
+                                                           @RequestPart(required = false) @ApiParam List<MultipartFile> postImages) {
         CreatePostRequestDto requestDto = new CreatePostRequestDto(title, area, category, text, nickname, userId);
-        CreatePostResponseDto responseDto=postService.createPost(requestDto,Type.coach);
+        CreatePostResponseDto responseDto=postService.createPost(requestDto,Type.player);
         imageService.uploadPostImages(responseDto.getPostId(), postImages);
         ResultResponse<CreatePostResponseDto> resultResponse=new ResultResponse<>();
         resultResponse.successResponse("플레이어 게시글 작성",responseDto);
@@ -109,14 +109,14 @@ public class PostController {
 
     @PutMapping()
     @ApiOperation(value = "게시글 수정")
-    public ResponseEntity<ResultResponse> updatePostList(@RequestPart @ApiParam String title,
-                                                         @RequestPart @ApiParam String area,
-                                                         @RequestPart @ApiParam String category,
-                                                         @RequestPart @ApiParam String text,
-                                                         @RequestPart @ApiParam String nickname,
-                                                         @RequestPart @ApiParam Long userId,
-                                                         @RequestPart @ApiParam Long postId,
-                                                         @RequestPart @ApiParam List<MultipartFile> postImages) {
+    public ResponseEntity<ResultResponse> updatePostList(@RequestParam @ApiParam String title,
+                                                         @RequestParam @ApiParam String area,
+                                                         @RequestParam @ApiParam String category,
+                                                         @RequestParam @ApiParam String text,
+                                                         @RequestParam @ApiParam String nickname,
+                                                         @RequestParam @ApiParam Long userId,
+                                                         @RequestParam @ApiParam Long postId,
+                                                         @RequestPart(required = false) @ApiParam List<MultipartFile> postImages) {
         //임시
         UpdatePostRequestDto requestDto=new UpdatePostRequestDto(title, area, category, text, nickname, userId, postId);
         imageService.deletePostImages(postId);

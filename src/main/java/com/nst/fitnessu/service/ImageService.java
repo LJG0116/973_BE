@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.nst.fitnessu.domain.Image;
 import com.nst.fitnessu.domain.Post;
 import com.nst.fitnessu.domain.User;
+import com.nst.fitnessu.repository.ImageRepository;
 import com.nst.fitnessu.repository.PostRepository;
 import com.nst.fitnessu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -31,6 +31,7 @@ public class ImageService {
     private final AmazonS3Client amazonS3Client;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -49,9 +50,11 @@ public class ImageService {
                 continue;
 
             Image image=Image.builder()
-                            .imageUrl(uploadImage(multipartFile))
+                    .imageUrl(uploadImage(multipartFile))
                     .build();
+            System.out.println("image = sex "+image);
             image.setPost(post);
+            imageRepository.save(image);
         }
     }
 
@@ -80,6 +83,7 @@ public class ImageService {
         return uploadImage(multipartFile);
     }
 
+    @Transactional
     private String uploadImage(MultipartFile multipartFile) {
         validateFileExists(multipartFile);
 
@@ -98,6 +102,7 @@ public class ImageService {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
+    @Transactional
     private void deleteImage(String imageUrl) {
 
         if(imageUrl !=null || imageUrl=="https://974s3.s3.ap-northeast-2.amazonaws.com/user.png"){

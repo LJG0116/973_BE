@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,7 @@ public class PostService {
                 .viewCount(0)
                 .type(type)
                 .content(requestDto.getText())
+                .images(new ArrayList<>())
                 .build();
 
         post.setUser(user);

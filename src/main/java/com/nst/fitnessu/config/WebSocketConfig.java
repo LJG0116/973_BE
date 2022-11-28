@@ -25,10 +25,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         */
         config.setApplicationDestinationPrefixes("/pub");
         config.enableStompBrokerRelay("/queue", "/topic", "/exchange", "/amq/queue")
-                .setRelayHost("fitnessu.link")
+                .setRelayHost("ec2-43-200-161-14.ap-northeast-2.compute.amazonaws.com")
                 .setRelayPort(61613)
-                .setClientLogin("admin")
-                .setClientPasscode("0116");
+                .setClientLogin("guest")
+                .setClientPasscode("guest");
     }
 
     //.addInterceptors(new HttpHandshakeInterceptor())
