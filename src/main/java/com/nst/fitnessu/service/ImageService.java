@@ -83,7 +83,6 @@ public class ImageService {
         return uploadImage(multipartFile);
     }
 
-    @Transactional
     private String uploadImage(MultipartFile multipartFile) {
         validateFileExists(multipartFile);
 
@@ -102,10 +101,9 @@ public class ImageService {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    @Transactional
     private void deleteImage(String imageUrl) {
 
-        if(imageUrl !=null || imageUrl=="https://974s3.s3.ap-northeast-2.amazonaws.com/user.png"){
+        if(imageUrl !=null || imageUrl!="https://974s3.s3.ap-northeast-2.amazonaws.com/user.png"){
             boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, imageUrl);
 
             if (isExistObject == true) {
