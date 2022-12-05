@@ -34,6 +34,7 @@ public class UserController {
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .nickname(requestDto.getNickname())
                 .roles(Collections.singletonList("ROLE_USER"))
+                .profileImage("https://974s3.s3.ap-northeast-2.amazonaws.com/user.png")
                 .build();
 
         userService.join(user);
