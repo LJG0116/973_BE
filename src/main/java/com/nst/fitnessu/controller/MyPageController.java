@@ -55,6 +55,7 @@ public class MyPageController {
                                                        @RequestParam @ApiParam String nickname,
                                                        @RequestPart(required = false) @ApiParam MultipartFile profileImage) {
         String imageUrl= imageService.uploadUserImage(id,profileImage);
+
         UpdateMyInfoRequestDto requestDto = new UpdateMyInfoRequestDto(id, email, nickname, intro, imageUrl);
         ViewMyInfoResponseDto responseDto = myPageService.updateMyInfo(requestDto);
         ResultResponse<ViewMyInfoResponseDto> resultResponse=new ResultResponse<>();

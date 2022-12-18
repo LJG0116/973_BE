@@ -39,7 +39,8 @@ public class ImageService {
     @Transactional
     public void uploadPostImages(Long postId, List<MultipartFile> multipartFiles) {
 
-        if(multipartFiles.isEmpty())
+
+        if(multipartFiles==null||multipartFiles.isEmpty())
             return;
 
         Post post= postRepository.findById(postId)
@@ -58,23 +59,38 @@ public class ImageService {
         }
     }
 
+
     @Transactional
     public void deletePostImages(Long id){
         Post post= postRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException());
-
+        /*
         for(Image image : post.getImages()){
             deleteImage(image.getImageUrl());
             image.deleteImage(post);
         }
+
+         */
+
+        for(int i=0;i<post.getImages().size();i++){
+            Image image=post.getImages().get(i);
+            if(image==null){
+                continue;
+            }else{
+                deleteImage(image.getImageUrl());
+                image.deleteImage(post);
+                i--;
+            }
+        }
     }
+
     @Transactional
     public String uploadUserImage(Long id, MultipartFile multipartFile) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException());
 
-        if(multipartFile.isEmpty())
+        if(multipartFile==null||multipartFile.isEmpty())
             return user.getProfileImage();
 
         //s3에서 기존 파일 삭제
@@ -103,7 +119,7 @@ public class ImageService {
 
     private void deleteImage(String imageUrl) {
 
-        if(imageUrl !=null || imageUrl!="https://974s3.s3.ap-northeast-2.amazonaws.com/user.png"){
+        if(imageUrl !=null || imageUrl!="https://974s3.s3.ap-northeast-2.amazonaws.com/90acde97-ed9d-425e-bdf0-00d161a550ae.png"){
             boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, imageUrl);
 
             if (isExistObject == true) {
